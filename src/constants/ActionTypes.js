@@ -2,9 +2,9 @@
 export const FETCH_PRODUCTS = 'FETCH_PRODUCTS';
 export const LOAD_MORE = 'LOAD_MORE';
     // the below should not be required
-// export const SET_KEYWORD = 'SET_KEYWORD';
-// export const SET_CATEGORY = 'SET_CATEGORY';
-// export const SET_DEFAULT = 'SET_DEFAULT';
+export const SET_KEYWORD = 'SET_KEYWORD';
+export const SET_CATEGORY = 'SET_CATEGORY';
+export const SET_DEFAULT = 'SET_DEFAULT';
 
     //CART ACTIONS
 export const ADD_TO_CART = 'ADD_TO_CART';
