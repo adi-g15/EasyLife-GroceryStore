@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyLife</title>
+
+    <style>
+        .banner{
+            height: 100vh;
+            background-image: url("../public/bg.png");
+            background-color: #fff;
+            background-size: cover;
+            background-position: bottom left;
+            /* background-position: center left; */
+            background-attachment: fixed;
+        }
+
+        @media only screen and (max-width: 767px){
+            .banner{
+                background-image: url('../public/bg_small.jpg');
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner"></div>
+</body>
+</html>
