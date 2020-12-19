@@ -1,5 +1,16 @@
 import React, { Component, useState } from "react"
-import { Grid } from "@material-ui/core";
+import { 
+    Card, 
+    CardActionArea, 
+    CardActions, 
+    CardContent, 
+    CardMedia, 
+    Typography, 
+    Button, 
+    ButtonGroup, 
+    IconButton 
+} from "@material-ui/core";
+import { PlusOne, PlusOneTwoTone, FormatIndentDecrease } from "@material-ui/icons";
 
 class SabjiBox extends Component {
     constructor(props) {
@@ -17,14 +28,21 @@ class SabjiBox extends Component {
          */
         super(props);
         this.state = {
-            name: this.props.name || "Unknown",
-             visible: this.props.visible || false,
-            price: this.props.visible || 0,
-            unit: this.props.unit || 'kg'
+            name: this.props.data.name || "Unknown",
+            visible: this.props.data.visible || false,
+            price: this.props.data.visible || 0,
+            unit: this.props.data.unit || 'kg',
+            qntty: this.props.data.qntty || 0   // quantity
         };
 
-        console.log(this.props);
-        console.log(this.state);
+        this.styles = {
+            root: {
+                maxWidth: 345
+            }
+        };
+
+        this.increaseQntty.bind(this);
+        this.decreaseQntty.bind(this);
     }
 
     setName(newName) {
@@ -43,15 +61,69 @@ class SabjiBox extends Component {
         this.setState({ unit: newUnit });
     }
 
+    increaseQntty(){
+        console.log(this.state.qntty);
+        this.setState((prevState) => {
+            console.log(prevState.qntty);
+            return { qntty: prevState.qntty+1 }
+        })
+    }
+
+    decreaseQntty(){
+        this.setState((prevState) => {
+            return { qntty: prevState.qntty >= 0 ? prevState.qntty + 1 : 0 }
+        })
+    }
+
     componentWillMount(){}
     componentWillUnmount(){}
 
     render() {
         return (
             <>
-                <Grid>
-                    {this.state.name}
-                </Grid>
+                <Card style={this.styles.root} >
+                    <CardActionArea >
+                        <CardMedia 
+                            component="img"
+                            alt={`${this.state.name}`}
+                            height="140"
+                            image="../../assets/temp.jpg"
+                            title={this.state.name}
+                        />
+
+                        <CardContent>
+                            <Typography variant="h6" component="h2">    {/**why though ? */}
+                                {this.state.name}
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
+                    <CardActions>
+                        <ButtonGroup>
+                        <IconButton 
+                        onClick={() => this.decreaseQntty}
+                        color="secondary">
+                            <FormatIndentDecrease />
+                        </IconButton>
+                        {
+                            this.state.qntty >= 1 ? 
+                            (
+                                <Button>
+                                    {this.state.qntty}
+                                </Button>
+                            ) : (
+                                <Button>
+                                    Add
+                                </Button>
+                            )
+                        }
+                            <IconButton 
+                            onClick={() => this.increaseQntty /**Used arrow function since we need to bind it */}
+                            color="secondary">
+                                <PlusOne />
+                            </IconButton>
+                        </ButtonGroup>
+                    </CardActions>
+                </Card>
             </>
         )
     }

@@ -1,6 +1,8 @@
 import React from "react";
-import { Container } from "@material-ui/core"
 import SabjiBox from "./sabjibox"
+import {
+    Grid
+} from "@material-ui/core"
 
 class SabjiArea extends React.Component {
 
@@ -10,25 +12,30 @@ class SabjiArea extends React.Component {
      *          2. Fetch when this component begins to mount, in componentWillMount() lifetime method
      */
     constructor( props ) {
-        this.state = {
-            list: []
-        }
-    }
+        super(props);
 
-    componentWillMount() {
-        // fetch all sabji lists
-        const fetchedSabjis = [];
-        
-        this.setState({list: fetchedSabjis})
+        this.state = {
+            list: this.props.list
+        }
+
+        console.log(props.list);
     }
 
     render() {
         return (
-            <Component>
-                { this.state.list.map(
-                    (sabji, index) => <SabjiBox props={sabji} />
-                )}
-            </Component>
+            <div style={{flexGrow: 1}}>
+                <Grid contanier>
+                {
+                    this.state.list.map(
+                        (sabji, index) => (
+                            <Grid item xs={6} sm={3} style={{textAlign: 'center'}}>
+                                <SabjiBox data={sabji} key={index} />
+                            </Grid>
+                        )
+                    )
+                }
+                </Grid>
+            </div>
         )
     }
 }

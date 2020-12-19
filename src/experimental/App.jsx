@@ -1,44 +1,20 @@
 import React from 'react'
 import FullWidthGrid from './components/fullWidthGrid';
 import NavBar from './components/navbar'
-import SabjiBox from './components/sabjibox';
 import "fontsource-roboto";
+import SabjiArea from './components/sabjiArea';
+import { Container } from "@material-ui/core";
+import getSabjiList from "./util/getSabjiList";
 
-const sabji_list = [
-    {
-        name: 'Tomato',
-        price: 45,
-        unit: 'kg',
-        visible: true
-    },
-    {
-        name: 'Onion',
-        price: 30,
-        unit: 'kg',
-        visible: true
-    },
-    {
-        name: 'Milk',
-        price: 45,
-        unit: 'litre',
-        visible: true
-    },
-    {
-        name: 'Potato',
-        price: 15,
-        unit: 'kg',
-        visible: true
-    },
-]
+const sabji_list = await getSabjiList();
 
 export default function() {
     return (
         <>
             <NavBar />
-            {sabji_list.map(
-                (val, index) => <SabjiBox props={val} />
-            )}
-
+            <Container>
+                <SabjiArea list={sabji_list} /> {/**QUESTION -> How to pass props down to the router, so that it's passed down in all cases */}
+            </Container>
             {/* <FullWidthGrid /> */}
         </>
     )

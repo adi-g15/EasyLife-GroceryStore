@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { AppBar, InputAdornment, Container, makeStyles, TextField, Toolbar, Typography } from "@material-ui/core";
-import { AccountCircle, Search } from "@material-ui/icons";
+import { AppBar, InputAdornment, Container, ButtonGroup, makeStyles, TextField, Toolbar, Typography, Button } from "@material-ui/core";
+import { AccountTree, Search, AccountCircleRounded } from "@material-ui/icons";
 import "fontsource-righteous/400.css";
 
 const _styling = {
@@ -52,34 +52,59 @@ class NavBar extends React.Component {
 	componentDidUpdate(){}
 
 	render() {
+		let isLoggedIn = false;
+
 		return (
-			<AppBar position="static">
-				<Toolbar style={{backgroundColor: 'white'}}>
-					<Container>
-						{/* <img src="../assets/logo.png" alt="Logo"/> */}
-						<Typography variant="h4" style={{fontFamily: 'Righteous'}}>
-							<span style={{color: 'orange'}}>Easy</span>
-							<span style={{color: 'green'}}>Life</span>
-						</Typography>
-					</Container>
-					<TextField 
-						// style={styling.search}
-						label="Search..." 
-						variant="outlined" 
-						size="small" 
-						type="text"
-						InputProps={
-							{
-								startAdornment: (
-									<InputAdornment position="start">
-										<Search />
-									</InputAdornment>
+			<header>
+				<AppBar position="static">
+					<Toolbar style={{backgroundColor: 'white'}}>
+						<Container>
+							{/* <img src="../assets/logo.png" alt="Logo"/> */}
+							<Typography variant="h4" style={{fontFamily: 'Righteous'}}>
+								<span style={{color: 'orange'}}>Easy</span>
+								<span style={{color: 'green'}}>Life</span>
+							</Typography>
+						</Container>
+						<TextField 
+							// style={styling.search}
+							label="Search..." 
+							variant="outlined" 
+							size="small" 
+							type="text"
+							InputProps={
+								{
+									startAdornment: (
+										<InputAdornment position="start">
+											<Search />
+										</InputAdornment>
+									)
+								}
+							}
+						/>
+						<ButtonGroup>
+							<Button>
+								$249
+							</Button>
+							{isLoggedIn ? 
+								(
+									<Button
+										startIcon={<AccountCircleRounded/>}
+									>
+										Account
+									</Button>
+								) :
+								(
+									<Button
+										startIcon={<AccountTree/>}
+									>
+										Login
+									</Button>
 								)
 							}
-						}
-					/>
-				</Toolbar>
-			</AppBar>
+						</ButtonGroup>
+					</Toolbar>
+				</AppBar>
+			</header>
 		)
 	}
 }
