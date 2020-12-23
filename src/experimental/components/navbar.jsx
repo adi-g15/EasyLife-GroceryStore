@@ -3,7 +3,7 @@ import { AppBar, InputAdornment, Container, ButtonGroup, makeStyles, TextField, 
 import { AccountTree, Search, AccountCircleRounded } from "@material-ui/icons";
 import "fontsource-righteous/400.css";
 
-const _styling = {
+const styling = makeStyles({	// not naming useStyles Just to check
 	navbar: {
 		width: 'calc( 100% - 4px - 4vw )',  /*subtract border width from both sides + margins*/
 		backgroundColor: 'white',
@@ -33,80 +33,67 @@ const _styling = {
 		borderRadius: '20px',
 		fontSize: '1.3em',
 		padding: '1vh 2vw',   /* it is padding: vertical horizontal*/
+	},
+	toolbar: {
+		backgroundColor: 'white'
 	}
-}
+})
 
-class NavBar extends React.Component {
-	constructor( props ){
-		super(props);
+export default function NavBar(props) {
+	const [ isLoggedIn, setLoggedIn ] = useState(props.loggedIn || false);
 
-		this.state = {
-			loggedIn: props.loggedIn || false
-		};
-	}
+	const classes = styling();
 
-	setLogged( isLogged ){
-		this.setState({loggedIn: isLogged});
-	}
-
-	componentDidUpdate(){}
-
-	render() {
-		let isLoggedIn = false;
-
-		return (
-			<header>
-				<AppBar position="static">
-					<Toolbar style={{backgroundColor: 'white'}}>
-						<Container>
-							{/* <img src="../assets/logo.png" alt="Logo"/> */}
-							<Typography variant="h4" style={{fontFamily: 'Righteous'}}>
-								<span style={{color: 'orange'}}>Easy</span>
-								<span style={{color: 'green'}}>Life</span>
-							</Typography>
-						</Container>
-						<TextField 
-							// style={styling.search}
-							label="Search..." 
-							variant="outlined" 
-							size="small" 
-							type="text"
-							InputProps={
-								{
-									startAdornment: (
-										<InputAdornment position="start">
-											<Search />
-										</InputAdornment>
-									)
-								}
-							}
-						/>
-						<ButtonGroup>
-							<Button>
-								$249
-							</Button>
-							{isLoggedIn ? 
-								(
-									<Button
-										startIcon={<AccountCircleRounded/>}
-									>
-										Account
-									</Button>
-								) :
-								(
-									<Button
-										startIcon={<AccountTree/>}
-									>
-										Login
-									</Button>
+	return (
+		<header>
+			<AppBar position="static">
+				<Toolbar className={classes.toolbar}>
+					<Container>
+						{/* <img src="/logo.png" alt="EasyLife" height="75%"/> */}
+						<Typography variant="h4" style={{fontFamily: 'Righteous'}}>
+							<span style={{color: 'orange'}}>Easy</span>
+							<span style={{color: 'green'}}>Life</span>
+						</Typography>
+					</Container>
+					<TextField 
+						// style={styling.search}
+						label="Search..." 
+						variant="outlined" 
+						size="small" 
+						type="text"
+						InputProps={
+							{
+								startAdornment: (
+									<InputAdornment position="start">
+										<Search />
+									</InputAdornment>
 								)
 							}
-						</ButtonGroup>
-					</Toolbar>
-				</AppBar>
-			</header>
-		)
-	}
+						}
+					/>
+					<ButtonGroup>
+						<Button>
+							₹249
+						</Button>
+						{isLoggedIn ? 
+							(
+								<Button
+									startIcon={<AccountCircleRounded/>}
+								>
+									Account
+								</Button>
+							) :
+							(
+								<Button
+									startIcon={<AccountTree/>}
+								>
+									Login
+								</Button>
+							)
+						}
+					</ButtonGroup>
+				</Toolbar>
+			</AppBar>
+		</header>
+	)
 }
-
-export default NavBar;

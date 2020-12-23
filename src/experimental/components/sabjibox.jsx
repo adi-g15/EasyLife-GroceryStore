@@ -86,8 +86,8 @@ class SabjiBox extends Component {
                         <CardMedia 
                             component="img"
                             alt={`${this.state.name}`}
-                            height="140"
-                            image="../../assets/temp.jpg"
+                            height="100"
+                            image="/sabjis/temp.jpg"
                             title={this.state.name}
                         />
 
