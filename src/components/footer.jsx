@@ -19,6 +19,9 @@ const useStyles = makeStyles({
         position: "absolute",
         bottom: 0,
         width: "100%"
+    },
+    footer_msg: {
+        padding: 4
     }
 })
 
@@ -29,7 +32,7 @@ export default function (props) {
     return (
         <footer>
             <Paper elevation={0} square className={classes.footer_green}> {/**rounded corners disabled */}
-                <Typography variat="h6" component="h5" align="center">
+                <Typography className={classes.footer_msg} variat="h6" component="h5" align="center">
                     Order groceries online, and we help ease your life a bit more
                 </Typography>
                 <hr />

@@ -9,7 +9,7 @@ import {
 	Toolbar, 
 	Typography, 
 	Button,
-	Divider
+	IconButton
 } from "@material-ui/core";
 import { AccountTree, Search, AccountCircleRounded } from "@material-ui/icons";
 import "fontsource-righteous/400.css";
@@ -71,7 +71,13 @@ export default function NavBar(props) {
 						</Typography>
 					</Container>
 					{
-					 !props.isMobile && (<TextField 
+					 props.isMobile ? 
+					 (
+						<IconButton>
+							<Search />
+						</IconButton>
+					 ): 
+					 (<TextField 
 						// style={styling.search}
 						label="Search..." 
 						variant="outlined" 
