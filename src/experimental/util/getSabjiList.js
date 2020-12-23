@@ -26,9 +26,9 @@ const sabji_list = [
 ]
 
 export default (limit = 20) => {
-    const list = []
+    let list = []
     // call API here
-    list = sabji_list
+    list = [...sabji_list]
 
     return new Promise((resolve, reject) => {
         setTimeout(() => {

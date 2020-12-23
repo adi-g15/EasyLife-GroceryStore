@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./page/App";
+// import App from "./page/App";
 import { Provider } from "react-redux";
 import store from "./store";
 import Experimental from "./experimental/App";
@@ -10,7 +10,6 @@ ReactDOM.render(
     <Provider store={store}>
         <Experimental />
     </Provider>,
-
     document.getElementById("root")
 );
 

@@ -37,7 +37,7 @@ class SabjiBox extends Component {
 
         this.styles = {
             root: {
-                maxWidth: 345
+                // maxWidth: 345
             }
         };
 
