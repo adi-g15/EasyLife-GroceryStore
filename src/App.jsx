@@ -8,17 +8,20 @@ export default function() {
     const [ isMobile, setIsMobile ] = useState(false);
 
     useEffect(() => {
-        document.addEventListener("resize", setIsMobile( window.innerWidth <= 768 ))
-        console.log( "Detected Mobile: ", isMobile );
+        setIsMobile( window.innerWidth <= 768 );
 
-        return () => document.removeEventListener("resize", setIsMobile);    // this returned function runs when unmounted
+            // not being triggered more than once
+        // document.addEventListener("resize", setIsMobile( window.innerWidth <= 768 ))
+        // console.log( "Detected Mobile: ", isMobile );
+
+        // return () => document.removeEventListener("resize", setIsMobile);    // this returned function runs when unmounted
     })
 
     return (
         <>
             <NavBar isMobile={isMobile} />
-            <SabjiArea isMobile={isMobile} />
-            <FooBar isMobile={isMobile} />
+            {/* <SabjiArea isMobile={isMobile} /> */}
+            <FooBar />
         </>
     )
 }

@@ -12,9 +12,13 @@ import { MailRounded, Facebook, WhatsApp } from "@material-ui/icons";
 const useStyles = makeStyles({
     footer_green: {
         margin: 0,
-        padding: 20,
+        paddingTop: 20,
+        paddingBottom: 20,
         backgroundColor: "rgba(19, 174, 19, 0.71)",
-        color: "white"
+        color: "white",
+        position: "absolute",
+        bottom: 0,
+        width: "100%"
     }
 })
 
@@ -34,13 +38,13 @@ export default function (props) {
                 </Typography>
                     <Container style={{display: 'flex', justifyContent: "center"}}>
                         <ButtonGroup color="inherit" align="center">
-                            <IconButton>
+                            <IconButton target="_blank" href="mailto:email@notyetmade.com">
                                 <MailRounded />
                             </IconButton>
-                            <IconButton>
+                            <IconButton target="_blank" href="http://m.me/<PAGE_NAME>">
                                 <Facebook />
                             </IconButton>
-                            <IconButton>
+                            <IconButton target="_blank" href="https://wa.me/918700905832?text=*Info%2FFeedback%20on%20EasyLife*%20-%3E">
                                 <WhatsApp />
                             </IconButton>
                         </ButtonGroup>

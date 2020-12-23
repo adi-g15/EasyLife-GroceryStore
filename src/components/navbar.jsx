@@ -1,9 +1,20 @@
 import React, { useState } from "react";
-import { AppBar, InputAdornment, Container, ButtonGroup, makeStyles, TextField, Toolbar, Typography, Button } from "@material-ui/core";
+import {
+	AppBar, 
+	InputAdornment, 
+	Container, 
+	ButtonGroup, 
+	makeStyles, 
+	TextField, 
+	Toolbar, 
+	Typography, 
+	Button,
+	Divider
+} from "@material-ui/core";
 import { AccountTree, Search, AccountCircleRounded } from "@material-ui/icons";
 import "fontsource-righteous/400.css";
 
-const styling = makeStyles({	// not naming useStyles Just to check
+const styling = makeStyles( theme => ({	// not naming useStyles Just to check
 	navbar: {
 		width: 'calc( 100% - 4px - 4vw )',  /*subtract border width from both sides + margins*/
 		backgroundColor: 'white',
@@ -35,9 +46,13 @@ const styling = makeStyles({	// not naming useStyles Just to check
 		padding: '1vh 2vw',   /* it is padding: vertical horizontal*/
 	},
 	toolbar: {
-		backgroundColor: 'white'
+		backgroundColor: theme.palette.common.white,
+	},
+	mobile_toolbar: {
+		backgroundColor: theme.palette.common.white,
+		paddingLeft: 2
 	}
-})
+}))
 
 export default function NavBar(props) {
 	const [ isLoggedIn, setLoggedIn ] = useState(props.loggedIn || false);
@@ -47,7 +62,7 @@ export default function NavBar(props) {
 	return (
 		<header>
 			<AppBar position="static">
-				<Toolbar className={classes.toolbar}>
+				<Toolbar className={ props.isMobile ? classes.mobile_toolbar : classes.toolbar}>
 					<Container>
 						{/* <img src="/logo.png" alt="EasyLife" height="75%"/> */}
 						<Typography variant="h4" style={{fontFamily: 'Righteous'}}>
@@ -55,7 +70,8 @@ export default function NavBar(props) {
 							<span style={{color: 'green'}}>Life</span>
 						</Typography>
 					</Container>
-					<TextField 
+					{
+					 !props.isMobile && (<TextField 
 						// style={styling.search}
 						label="Search..." 
 						variant="outlined" 
@@ -70,8 +86,8 @@ export default function NavBar(props) {
 								)
 							}
 						}
-					/>
-					<ButtonGroup>
+					/>)}
+					<ButtonGroup style={{marginLeft: props.isMobile ? 0 :20}}>
 						<Button>
 							₹249
 						</Button>
