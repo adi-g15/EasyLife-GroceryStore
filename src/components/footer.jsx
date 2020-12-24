@@ -16,8 +16,8 @@ const useStyles = makeStyles({
         paddingBottom: 20,
         backgroundColor: "rgba(19, 174, 19, 0.71)",
         color: "white",
-        position: "absolute",
-        bottom: 0,
+        // position: "absolute",
+        // bottom: 0,
         width: "100%"
     },
     footer_msg: {

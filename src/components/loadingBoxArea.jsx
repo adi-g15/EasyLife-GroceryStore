@@ -14,7 +14,7 @@ export default function(props){
 
     return (
         <Grid container>
-            tmpList.map((box) => box)
+            {tmpList.map((box) => box)}
         </Grid>
     )
 }

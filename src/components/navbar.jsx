@@ -11,7 +11,7 @@ import {
 	Button,
 	IconButton
 } from "@material-ui/core";
-import { AccountTree, Search, AccountCircleRounded } from "@material-ui/icons";
+import { AccountTree, ShoppingCartRounded, Search, AccountCircleRounded } from "@material-ui/icons";
 import "fontsource-righteous/400.css";
 
 const styling = makeStyles( theme => ({	// not naming useStyles Just to check
@@ -56,6 +56,7 @@ const styling = makeStyles( theme => ({	// not naming useStyles Just to check
 
 export default function NavBar(props) {
 	const [ isLoggedIn, setLoggedIn ] = useState(props.loggedIn || false);
+	const [ cartTotal, setCartTotal ] = useState(249);
 
 	const classes = styling();
 
@@ -94,23 +95,44 @@ export default function NavBar(props) {
 						}
 					/>)}
 					<ButtonGroup style={{marginLeft: props.isMobile ? 0 :20}}>
-						<Button>
-							₹249
-						</Button>
+						{
+							props.isMobile ?
+							(
+								<Button variant="outlined">
+									₹{cartTotal}
+								</Button>
+							):
+							(<Button>
+								<ShoppingCartRounded style={{marginRight: 6}} />
+								₹{cartTotal}
+							</Button>)
+						}
 						{isLoggedIn ? 
 							(
-								<Button
+								props.isMobile ? 
+								(
+									<Button>
+										<AccountCircleRounded />
+									</Button>
+								):
+								(<Button
 									startIcon={<AccountCircleRounded/>}
 								>
 									Account
-								</Button>
+								</Button>)
 							) :
 							(
-								<Button
+								props.isMobile ? 
+								(
+									<Button>
+										<AccountTree />
+									</Button>
+								):
+								(<Button
 									startIcon={<AccountTree/>}
 								>
-									Login
-								</Button>
+									{ !props.isMobile &&"Login"}
+								</Button>)
 							)
 						}
 					</ButtonGroup>
