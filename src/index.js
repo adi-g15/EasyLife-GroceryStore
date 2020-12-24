@@ -4,11 +4,12 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import App from "./App";
+import Experimental from "./Experimental";
 import "./styles/global.css";
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <Experimental />
     </Provider>,
 
     document.getElementById("root")
