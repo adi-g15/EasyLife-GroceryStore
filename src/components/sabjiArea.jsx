@@ -39,8 +39,8 @@ export default function SabjiArea(props) {
 		// set the boxes as loading
 		if(loading){
 			const tmpList = await FetchPrices();
-			setList(tmpList || []);
 			setLoading(false);
+			setList(tmpList || []);
 		}
 	})
 

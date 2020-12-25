@@ -1,40 +1,10 @@
-import { SUBMIT_CART } from "../constants/ActionTypes"
-import { SubmitCart } from "../services/cart_service"
-
 import * as Types from '../constants/ActionTypes';
 
 var data = JSON.parse(localStorage.getItem('cart'));
 const initialState = data ? data : [];
 
 	// the state in our case is just an ARRAY
-function cartReducer(state = initialState, action) {
-	let newState = state.length === 0 ? (
-							JSON.parse(localStorage.getItem('cart'))
-						): state;
-
-	switch (action.type) {
-		case SUBMIT_CART:
-			SubmitCart(newState.cart || [])
-				.then(({list,total}) => {
-
-						// @note -> May check if total was equal or not
-
-					alert(`Cart Total - ${total}${list.join()}`);
-					localStorage.removeItem('cart')
-				})
-				.catch(err => alert(err))
-
-				// remove from localStorage only after it's sure that 
-			return [];	// cart is emptied
-	
-		default:
-			break;
-	}
-}
-
-
-
-const cart_old = (state = initialState, action) => {
+const cart = (state = initialState, action) => {
 	let newState = [];
 	let index = -1;
 
@@ -105,4 +75,4 @@ const findIndexById = (arr, id) => {
 	return -1;
 };
 
-export default cartReducer;
+export default cart;

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import {
 	AppBar, 
 	InputAdornment, 
@@ -13,6 +14,7 @@ import {
 } from "@material-ui/core";
 import { AccountTree, ShoppingCartRounded, Search, AccountCircleRounded } from "@material-ui/icons";
 import "fontsource-righteous/400.css";
+import { SUBMIT_CART } from "../constants/ActionTypes";
 
 const styling = makeStyles( theme => ({	// not naming useStyles Just to check
 	navbar: {
@@ -54,9 +56,11 @@ const styling = makeStyles( theme => ({	// not naming useStyles Just to check
 	}
 }))
 
-export default function NavBar(props) {
-	const [ isLoggedIn, setLoggedIn ] = useState(props.loggedIn || false);
-	const [ cartTotal, setCartTotal ] = useState(249);
+function NavBar(props) {
+	// const [ isLoggedIn, setLoggedIn ] = useState(props.loggedIn || false);
+	// const [ cartTotal, setCartTotal ] = useState(249);
+	const cartContent = props.cart;
+	// todo -> Instead of setCartTotal, fetch it from store, and change there itself
 
 	const classes = styling();
 
@@ -95,19 +99,14 @@ export default function NavBar(props) {
 						}
 					/>)}
 					<ButtonGroup style={{marginLeft: props.isMobile ? 0 :20}}>
+					<Button variant="outlined" onClick={props.handleCart}>
 						{
-							props.isMobile ?
-							(
-								<Button variant="outlined">
-									₹{cartTotal}
-								</Button>
-							):
-							(<Button>
-								<ShoppingCartRounded style={{marginRight: 6}} />
-								₹{cartTotal}
-							</Button>)
+							props.isMobile && (
+								<ShoppingCartRounded style={{marginRight: 6}} />)
 						}
-						{isLoggedIn ? 
+						₹{props.cartTotal}
+					</Button>
+					{props.isLoggedIn ? 
 							(
 								props.isMobile ? 
 								(
@@ -141,3 +140,25 @@ export default function NavBar(props) {
 		</header>
 	)
 }
+
+function mapStateToProps(state) {
+	window.state = state;
+	return {
+		isMobile: state.screen.isMobile,
+		cartTotal: state.cart.reduce((acc, curr) => (acc+curr)),
+		isLoggedIn: state.user.isLoggedIn
+	};
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		handleCart: (e) => {
+			e.preventDefault();
+
+			// return Promise
+			dispatch({type: SUBMIT_CART});
+		}
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

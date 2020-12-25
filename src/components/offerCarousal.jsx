@@ -70,8 +70,8 @@ export default function OfferCarousal() {
             //     {product: "hi5", offer_brief: "bye80"}
             // ];
 
-            setOffers(newOffers);
             toggleOffersLoading(false);
+            setOffers(newOffers);
         }
     })
 
