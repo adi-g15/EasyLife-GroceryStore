@@ -53,7 +53,7 @@ export default function SabjiArea(props) {
 					{
 						list.map(
 							(sabji, index) => (
-								<Grid item xs={6} sm={4} md={3} style={{textAlign: 'center'}}>
+								<Grid item xs={6} sm={4} md={3} style={{textAlign: 'center'}} key={index}>
 									<SabjiBox data={sabji} key={index} />
 								</Grid>
 							)

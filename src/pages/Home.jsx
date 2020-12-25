@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SabjiArea from '../components/sabjiArea';
 // import Carousel from "react-material-ui-carousel"
-import Carousel from "react-multi-carousel"
-import OfferCard from "../components/offer";
-import { FetchOffers } from "../services/offer_service";
-import { Card } from "@material-ui/core";
+import OfferCarousal from "../components/offerCarousal";
 
 const responsive = {
     desktop: {
@@ -39,44 +36,9 @@ let items = [
 ]
 
 export default function Home(props) {
-    const [ offers, setOffers ] = useState([])
-    const [ offersLoading, toggleOffersLoading ] = useState(true)
-
-    useEffect(async () => {
-        if(offersLoading){
-            const offerList = await FetchOffers().catch(err => {console.error(err); return [];})
-
-            setOffers(offerList);
-            toggleOffersLoading(false);
-        }
-    })
-
     return (
     <>
-        {/* <Carousel swipeable={true} infinite={true} autoPlay={true} autoPlaySpeed={1000} keyBoardControl={true} showDots={true} responsive={responsive}>
-            {/* {offersLoading ? (
-                    <>
-                    </>
-                ):
-                (
-                    <> */}
-                    {/* </>
-                )
-                    // offers.map((offer, index) => (
-                    //     <OfferCard 
-                    //         title={offer.product} 
-                    //         brief_desc={offer.offer_brief} 
-                    //         order_msg={offer.order_msg} 
-                    //         add_notes={offer.add_notes} 
-                    //         key={index} />
-                    // ))
-            } */}
-        {/* <Carousel autoPlay={true} interval={3000} indicators={true} navButtonsAlwaysVisible={true} >
-            {
-                
-            }
-            {items.map((item, index) => <OfferCard title={item.title} desc={item.desc} key={index} />)}
-        </Carousel> */}
+        <OfferCarousal />
         <SabjiArea isMobile={props.isMobile} />
     </>);
 }

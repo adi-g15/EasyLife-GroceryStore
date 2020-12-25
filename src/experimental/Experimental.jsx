@@ -1,5 +1,5 @@
 import React from "react";
-import CustomCarousal from "./experimental/carousal";
+import CustomCarousal from "./carousal";
 
 export default function Experimental() {
     return (
