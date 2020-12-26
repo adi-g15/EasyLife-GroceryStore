@@ -16,4 +16,7 @@ export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const STORE_USER = 'STORE_USER'  // for login
 export const CLEAR_USER = 'CLEAR_USER'  // for logout
 
+export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
+export const SIGNUP_FAIL = 'SIGNUP_FAIL'
+
 export const REFRESH_SCREEN = 'REFRESH_SCREEN';

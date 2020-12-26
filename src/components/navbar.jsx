@@ -145,7 +145,7 @@ function mapStateToProps(state) {
 	window.state = state;
 	return {
 		isMobile: state.screen.isMobile,
-		cartTotal: state.cart.reduce((acc, curr) => (acc+curr)),
+		cartTotal: state.cart.length !== 0 ? state.cart.reduce((acc, curr) => (acc+curr)) : 0,
 		isLoggedIn: state.user.isLoggedIn
 	};
 }

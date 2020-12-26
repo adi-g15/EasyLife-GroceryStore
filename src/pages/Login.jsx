@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import {
@@ -11,7 +11,7 @@ import {
     makeStyles,
     Paper
 } from "@material-ui/core";
-import { LoginCustomer } from "../services/user_service";
+import { CustLoginCreator } from "../actions/cust";
 
 const useStyles = makeStyles({
     boxContainer: {
@@ -24,10 +24,12 @@ const useStyles = makeStyles({
     }
 })
 
-export default function () {
+export default function SignUpPage() {
     const usernameField = useRef(null);
     const passwordField = useRef(null);
     const rememberMeBox = useRef(null);
+
+    const [loading, toggleLoading] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -35,16 +37,18 @@ export default function () {
 
     function submitHandler(event) {
         event.preventDefault();
-        event.target.disabled = true;
 
-        const { user, token } = await LoginCustomer( usernameField.current.value, passwordField.current.value );
-        rememberMeBox.current.checked ? {
-            dispatch()
-        }: {
-            
-        };
-
-        event.target.disabled = false;
+        toggleLoading(true);
+        CustLoginCreator( usernameField.current.value, passwordField.current.value )
+            .then(() => {
+                console.log("SuccessLogin");
+            })
+            .catch(() => {
+                console.log("FailLogin");
+            })
+            .finally(() => {
+                toggleLoading(false);
+            })
     }
 
     return (
@@ -92,6 +96,7 @@ export default function () {
                     <Button
                         variant="contained"
                         onClick={submitHandler}
+                        disabled={!loading}
                     >
                         Login
                     </Button>

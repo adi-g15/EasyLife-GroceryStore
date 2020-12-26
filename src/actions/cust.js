@@ -1,5 +1,5 @@
 import { SignupCustomer } from "../services/user_service"
-import { STORE_USER } from "../constants/ActionTypes"
+import { STORE_USER, SIGNUP_SUCCESS, SIGNUP_FAIL } from "../constants/ActionTypes"
 
 /**
  * @note -> Saving to storages is the task of these action creators themselves, not the reducers, reducers only for modifying state, and services only for contacting the api
@@ -11,37 +11,44 @@ export function CustLoginCreator( uname, pass, rememberMe ) {
     }
 }
 
-export function CustSignupCreator( uname, pass, contact, rememberMe ) {
+export const CustSignupCreator = ( uname, pass, contact, rememberMe ) => {
+    console.debug(uname,pass,contact,rememberMe);
     const storage = rememberMe ? localStorage : sessionStorage;
     localStorage.removeItem('user');
     sessionStorage.removeItem('user');
     localStorage.removeItem('token');
     sessionStorage.removeItem('token');
 
-    return (dispath) => {
-        SignupCustomer(uname, pass, contact)
-            .then(({user, token}) => {
+    return (dispatch) => {
+        console.debug(`Going to call signup service, recieved dispatch: `, dispatch, uname,pass,contact,rememberMe)
+        return SignupCustomer(uname, pass, contact)
+            .then((data) => {
+            // .then(({user, token}) => {
+                console.debug("Success signup service", data)
                 storage.setItem('user', JSON.stringify({
-                    uname: user.uname,
-                    contact: user.contact
+                    uname: data.user.uname,
+                    contact: data.user.contact
                 }))
-                storage.setItem('token', token);    // should be a string by itself
+                storage.setItem('token', data.token);    // should be a string by itself
 
-                dispath({
+                dispatch({
                     type: STORE_USER,
-                    payload: user   // token NOT required to be in store
+                    payload: data.user   // token NOT required to be in store
                 })
 
-                dispath({
+                dispatch({
                     type: SIGNUP_SUCCESS
                 })
 
-                Promise.resolve();
+                return Promise.resolve();
             })
             .catch(err => {
-                dispath({
+                console.debug("Error signup service", err)
+                dispatch({
                     type: SIGNUP_FAIL
                 })
+
+                throw err;
             })
     }
 }

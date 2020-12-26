@@ -28,7 +28,7 @@ function cartReducer(state = initialState, action) {
 			return [];	// cart is emptied
 	
 		default:
-			break;
+			return state;
 	}
 }
 

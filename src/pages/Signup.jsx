@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import {
     Button,
@@ -9,9 +9,10 @@ import {
     Typography,
     TextField,
     makeStyles,
-    Paper
+    Paper,
+    InputAdornment
 } from "@material-ui/core";
-import { LoginAction } from "../actions/cust";
+import { CustSignupCreator } from "../actions/cust";
 import {} from "../actions/cust";
 
 const useStyles = makeStyles({
@@ -25,33 +26,76 @@ const useStyles = makeStyles({
     }
 })
 
-export default function () {
-    const usernameField = useRef(null);
-    const passwordField = useRef(null);
-    const rememberMeBox = useRef(null);
-    const [loading, setLoading] = useState(false);
+export default function SignUpPage(props) {
+    // const usernameField = useRef(null);
+    // const passwordField = useRef(null);
+    const cnfrmpasswordField = useRef(null);
+    const mobileField = useRef(null);
 
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [cnfrmpassword, setCnfrmpassword] = useState('');
+    const [mobile, setMobile] = useState(null);
+    const [rememberMe, toggleRememberMe] = useState(true);
+
+    const [loading, setLoading] = useState(false);
+    let errorFlag = false;
+
+    const history = useHistory();
     const dispatch = useDispatch();
 
     const classes = useStyles();
 
     function submitHandler(event) {
         event.preventDefault();
-        event.target.disabled = true;
 
-        dispatch( LoginAction( usernameField.current.value, passwordField.current.value ) )
+        console.debug( "Going to call signup CREATOR: " );
+
+        if( password !== cnfrmpassword ) {
+            cnfrmpasswordField.current.error = true;
+            cnfrmpasswordField.current.helperText = "Passwords not matching...";
+
+            errorFlag = true;
+        }
+        if( mobile.toString().length !== 10 ) {
+            mobileField.current.error = true;
+            mobileField.current.helperText = "Passwords not matching";
+
+            errorFlag = true;
+        }
+
+        if( errorFlag ){
+            return setLoading(false);
+        }
+
+            /* 
+                THis dispatch is actually a wrapper, applied by redux-thunk, over the actual dispatch by redux
+                when we pass a function to dispatch(ie. dispatch(action); $where action is a function$),
+                THEN what dispatch does is -> 
+
+                    function (action) {
+                        if (typeof action === 'function') {
+                        return action(dispatch, getState, extraArgument);
+                        }
+
+                        return next(action);
+                    }
+
+                    // note - This isn't the original behaviour, it's due to the middleware applied
+            */
+        dispatch(CustSignupCreator( username, password, mobile, rememberMe ))
             .then(() => {
-                props.history.push("/") // @future -> When profile page is okay, redirect to '/me' route instead
+                console.debug("Successful");
+                history.push("/") // @future -> When profile page is okay, redirect to '/me' route instead
                 window.location.reload();
             })
-            .catch(() => {
-
+            .catch((err) => {
+                console.error(err);
+                alert( err.msg || err.err || "Couldn't Sign Up");
             })
             .finally(() => {
                 setLoading(false)
             })
-
-        event.target.disabled = false;
     }
 
     return (
@@ -64,55 +108,58 @@ export default function () {
                         <Typography style={{marginBottom: '2%'}} variant="h4">
                             Sign Up
                         </Typography>
-                        <Divider 
+                        <Divider
                             variant="middle"
                         />
                         <TextField
-                            ref={usernameField}
+                            onChange={(e) => setUsername(e.target.value)}
                             autoFocus={true}
-                            color="secondary"
-                            type="email"
                             label="Email/Mobile"
                             placeholder="Username"
                             helperText="You can also enter username..."
                             margin="normal"
+                            fullWidth
                             required
                             // onChange={() => setUserName(usernameField.current.value)}
                         />
                         <br />
-                        <TextField 
-                            ref={passwordField}
-                            color="secondary"
+                        <TextField
+                            onChange={(e) => setPassword(e.target.value)}
                             label="Password"
                             placeholder="Enter your password..."
                             helperText="Shh... Password"
+                            type="password"
                             margin="normal"
                             required
                             // onChange={() => setPassword(passwordField.current.value)}
                         />
                         <br />
-                        <TextField 
+                        <TextField
                             ref={cnfrmpasswordField}
-                            color="secondary"
+                            onChange={(e) => setCnfrmpassword(e.target.value)}
                             label="Confirm Password"
                             placeholder="Repeat the password..."
+                            type="password"
                             margin="normal"
                             required
                             // onChange={() => setPassword(passwordField.current.value)}
                         />
                         <br />
-                        <TextField 
+                        <TextField
                             ref={mobileField}
-                            color="secondary"
+                            onChange={(e) => setMobile(e.target.value)}
                             label="Mobile Number"
                             helperText="Optional..."
                             margin="normal"
+                            type="number"
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">+91</InputAdornment>
+                            }}
                             // onChange={() => setPassword(passwordField.current.value)}
                         />
                         <br />
-                        <Checkbox 
-                            ref={rememberMeBox}
-                            color="secondary"
+                        <Checkbox
+                            onChange={(e) => toggleRememberMe(e.target.checked)}
                             defaultChecked={true}
                             helperText="Remember Me"
                         />

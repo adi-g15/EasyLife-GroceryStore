@@ -9,7 +9,7 @@ const initialState = {
     isLoggedIn: user ? true: false
 }
 
-export default UserReducer( state = initialState, action ) {
+export default function UserReducer( state = initialState, action){
     const newState = Object.assign({}, state);
 
     switch (action.type) {

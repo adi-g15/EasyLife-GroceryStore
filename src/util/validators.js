@@ -1,11 +1,11 @@
-exports.isEmail = (email) => {
+export function isEmail(email) {
 	if(  typeof email !== "string" )	return false;
 
 	return RegExp(/^.+@.+$/u, "u")
 				.test(email);
 }
 
-exports.isPhone = (contact) => {
+export function isPhone(contact){
 	if(  typeof contact !== "string" && typeof contact !== 'number' ){
 		return false;
 	}

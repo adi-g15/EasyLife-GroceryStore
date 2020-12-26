@@ -6,7 +6,7 @@ import OfferCard from "./offer";
 const useStyles = makeStyles({
     slider: {
         position: "relative",   // not required in my case actually, the yt tutorial did so
-        border: "1px solid red",
+        // border: "1px solid red",
         width: 100 + '%',
         height: "50%",
         boxSizing: "border-box",
@@ -58,6 +58,13 @@ export default function OfferCarousal() {
 
     const [ offerList, setOffers ] = useState([])
     const [ offersLoading, toggleOffersLoading ] = useState(true)
+
+    useEffect(() => {
+        const handle = setInterval(() => {
+            goRight();
+            clearInterval(handle);
+        }, 3000);
+    })
 
     useEffect(async () => {
         if(offersLoading){
