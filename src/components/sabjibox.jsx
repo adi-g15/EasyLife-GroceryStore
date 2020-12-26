@@ -39,7 +39,6 @@ const useStyles = makeStyles(theme => ({
          */
 export default function SabjiBox(props) {
     const name = props.data.name || "Unknown";
-    const [visible, setVisible] = useState( props.data.visible || false );
     const price = props.data.price || 0;
     const unit = props.data.unit || 'kg';
     const [qntty, setQntty] = useState( props.data.qntty || 0 );  // quantity

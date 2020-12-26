@@ -1,5 +1,7 @@
 import * as Types from '../constants/ActionTypes';
 
+/**@caution - NOT IN USE CURRENTLY */
+
 const initialState = {
 	data: [],
 	limit: 12,
@@ -75,4 +77,4 @@ const products = (state = initialState, action) => {
 	}
 };
 
-export default products;
+// export default products;

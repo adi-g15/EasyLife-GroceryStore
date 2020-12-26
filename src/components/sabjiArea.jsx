@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import SabjiBox from "./sabjibox";
 import LoadingBoxArea from "./loadingBoxArea";
 import {
@@ -22,6 +23,7 @@ export default function SabjiArea(props) {
 	 *          1. Pass from the main application as `props` to this
 	 *          2. Fetch when this component begins to mount, in componentWillMount() lifetime method
 	 */
+
 	const [list, setList] = useState([]);
 	const [numBoxes, setNumBoxes] = useState(10);   // number of boxes that will be shown as loading, till data isn't finally received from the server
 	const [loading, setLoading] = useState(true);
@@ -30,7 +32,8 @@ export default function SabjiArea(props) {
 	// const [sortingOrder, setSortingOrder] = useState(null);
 	const nameFilter = props.nameFilter;    // state of the parent
 
-	const isMobile = props.isMobile || false;
+	const nameFilter = useSelector(state => state.filter.search);
+	const isMobile = useSelector(state => state.screen.isMobile) || false;
 	// const [flag, setFlag] = useState(0);
 
 	const classes = useStyles();
@@ -51,10 +54,12 @@ export default function SabjiArea(props) {
 				: (<Container>
 					<Grid container spacing={ isMobile ? 2 : 4} className={classes.container} justify="center">
 					{
-						list.map(
+						list.filter(
+							(sabji) => sabji.name && sabji.name.contains(nameFilter)
+						).map(
 							(sabji, index) => (
 								<Grid item xs={6} sm={4} md={3} style={{textAlign: 'center'}} key={index}>
-									<SabjiBox data={sabji} key={index} />
+									<SabjiBox data={sabji} key={sabji.id} />
 								</Grid>
 							)
 						)

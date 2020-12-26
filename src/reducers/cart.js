@@ -26,7 +26,7 @@ function cartReducer(state = initialState, action) {
 
 				// remove from localStorage only after it's sure that 
 			return [];	// cart is emptied
-	
+
 		default:
 			return state;
 	}

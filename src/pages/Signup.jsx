@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import { Link, useHistory } from "react-router-dom"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import {
     Button,
     Checkbox,
@@ -39,36 +39,56 @@ export default function SignUpPage(props) {
     const [rememberMe, toggleRememberMe] = useState(true);
 
     const [loading, setLoading] = useState(false);
-    let errorFlag = false;
+
+    let errorFlag = false;  // this flag ONLY set in validation
+
+    useEffect(() => {
+        errorFlag = false;  // after each render, reset this flag
+    })
 
     const history = useHistory();
     const dispatch = useDispatch();
+    const isMobile = useSelector((state) => state.screen.isMobile)
+
+    const [errorCnfrmPass, setErrorCnfrmPass] = useState(false);
+    const [helperMsgPass, setPassHelperMsg] = useState('');
+
+    const [errorMobile, setErrorCnfrmMobile] = useState(false);
+    const [helperMsgMobile, setMobileHelperMsg] = useState('Optional...');
 
     const classes = useStyles();
 
     function submitHandler(event) {
         event.preventDefault();
 
-        console.debug( "Going to call signup CREATOR: " );
-
         if( password !== cnfrmpassword ) {
-            cnfrmpasswordField.current.error = true;
-            cnfrmpasswordField.current.helperText = "Passwords not matching...";
+            setErrorCnfrmPass(true);
+            setPassHelperMsg("Passwords not matching");
 
             errorFlag = true;
+        } else {
+            setErrorCnfrmPass(false);
+            setPassHelperMsg("");
         }
-        if( mobile.toString().length !== 10 ) {
-            mobileField.current.error = true;
-            mobileField.current.helperText = "Passwords not matching";
+
+        if( mobile && mobile.toString().length !== 10 ) {
+            setErrorCnfrmMobile(true);
+            setMobileHelperMsg("Not 10 digit valid number");
 
             errorFlag = true;
+        } else {
+            setErrorCnfrmMobile(false);
+            setMobileHelperMsg("Optional...");
         }
 
         if( errorFlag ){
+            console.error("Input data isn't valid");
             return setLoading(false);
         }
 
-            /* 
+        console.debug( "Going to call signup CREATOR: " );
+
+        /* 
                 THis dispatch is actually a wrapper, applied by redux-thunk, over the actual dispatch by redux
                 when we pass a function to dispatch(ie. dispatch(action); $where action is a function$),
                 THEN what dispatch does is -> 
@@ -92,6 +112,10 @@ export default function SignUpPage(props) {
             .catch((err) => {
                 console.error(err);
                 alert( err.msg || err.err || "Couldn't Sign Up");
+
+                if( err.code == '11000' ){   // let it be a ==
+                    history.push("/login");
+                }
             })
             .finally(() => {
                 setLoading(false)
@@ -102,19 +126,24 @@ export default function SignUpPage(props) {
         <>
             <Container className={classes.boxContainer}>
                 <Paper className={classes.LoginBox}>
+                    <Typography style={{marginBottom: '2%'}} variant="h4">
+                        Sign Up
+                    </Typography>
+                    <Divider
+                        variant="middle"
+                    />
                     <form
+                        style={{
+                            marginLeft: isMobile ? '10%': '35%',
+                            marginRight: isMobile ? '10%': '35%',
+                        }}
                         onSubmit={submitHandler}
                     >
-                        <Typography style={{marginBottom: '2%'}} variant="h4">
-                            Sign Up
-                        </Typography>
-                        <Divider
-                            variant="middle"
-                        />
                         <TextField
                             onChange={(e) => setUsername(e.target.value)}
                             autoFocus={true}
                             label="Email/Mobile"
+                            type="email"
                             placeholder="Username"
                             helperText="You can also enter username..."
                             margin="normal"
@@ -130,32 +159,54 @@ export default function SignUpPage(props) {
                             helperText="Shh... Password"
                             type="password"
                             margin="normal"
+                            fullWidth
                             required
                             // onChange={() => setPassword(passwordField.current.value)}
                         />
                         <br />
                         <TextField
                             ref={cnfrmpasswordField}
-                            onChange={(e) => setCnfrmpassword(e.target.value)}
+                            onChange={(e) => { 
+                                if(e.target.value !== password){
+                                    setErrorCnfrmPass(true);
+                                    setPassHelperMsg("Passwords not matching");
+                                } else {
+                                    setErrorCnfrmPass(false);
+                                    setPassHelperMsg("");
+                                }
+
+                                setCnfrmpassword(e.target.value) 
+                            }}
                             label="Confirm Password"
                             placeholder="Repeat the password..."
                             type="password"
                             margin="normal"
+                            helperText={helperMsgPass}
+                            error={errorCnfrmPass}
+                            fullWidth
                             required
-                            // onChange={() => setPassword(passwordField.current.value)}
+                        // onChange={() => setPassword(passwordField.current.value)}
                         />
                         <br />
                         <TextField
                             ref={mobileField}
-                            onChange={(e) => setMobile(e.target.value)}
+                            onChange={(e) => {
+                                setErrorCnfrmMobile(false);
+                                setMobileHelperMsg("Optional...");                        
+
+                                setMobile(e.target.value)
+                            }}
                             label="Mobile Number"
-                            helperText="Optional..."
+                            error={errorMobile}
+                            helperText={helperMsgMobile}
+                            errorCnfrmMobile=""
                             margin="normal"
                             type="number"
                             InputProps={{
                                 startAdornment: <InputAdornment position="start">+91</InputAdornment>
                             }}
                             // onChange={() => setPassword(passwordField.current.value)}
+                            fullWidth
                         />
                         <br />
                         <Checkbox
@@ -172,13 +223,13 @@ export default function SignUpPage(props) {
                         >
                             SignUp
                         </Button>
-                        <Typography
-                            style={{fontSize: '1em', margin: '1%'}}
-                        >
-                        New User ? <Link to="/signup">Sign up Here</Link>
-                        </Typography>
                     </form>
-                </Paper>
+                    <Typography
+                        style={{fontSize: '1em', margin: '1%'}}
+                    >
+                    Already a Customer ? <Link to="/login">Login Here</Link>
+                    </Typography>
+              </Paper>
             </Container>
         </>
     )

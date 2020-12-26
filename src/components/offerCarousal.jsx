@@ -68,14 +68,14 @@ export default function OfferCarousal() {
 
     useEffect(async () => {
         if(offersLoading){
-            const newOffers = await FetchOffers().catch(err => {console.error(err); return [];})
-            // const newOffers = [
-            //     {product: "hi1", offer_brief: "bye10"},
-            //     {product: "hi2", offer_brief: "bye20"},
-            //     {product: "hi3", offer_brief: "bye40"},
-            //     {product: "hi4", offer_brief: "bye60"},
-            //     {product: "hi5", offer_brief: "bye80"}
-            // ];
+            // const newOffers = await FetchOffers().catch(err => {console.error(err); return [];})
+            const newOffers = [
+                {product: "hi1", offer_brief: "bye10"},
+                {product: "hi2", offer_brief: "bye20"},
+                {product: "hi3", offer_brief: "bye40"},
+                {product: "hi4", offer_brief: "bye60"},
+                {product: "hi5", offer_brief: "bye80"}
+            ];
 
             toggleOffersLoading(false);
             setOffers(newOffers);
@@ -102,7 +102,13 @@ export default function OfferCarousal() {
         <div className={classes.slider}>
             {
                 offerList.map((item, index) => (
-                    <div className={classes.slide} key={index} style={{transform: `translateX(${ -(slideIndex*104)}%)`}}>
+                    <div
+                        className={classes.slide}
+                        key={index} 
+                        style={{
+                            transform: `translateX(${ -(slideIndex*104)}%)`
+                        }}
+                    >
                         <OfferCard 
                             title={item.product} 
                             brief_desc={item.offer_brief} 

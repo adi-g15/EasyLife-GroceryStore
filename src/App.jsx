@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from "react-redux";
 import { BrowserRouter, Route } from "react-router-dom"
 import NavBar from './components/navbar'
 import FooBar from './components/footer'
@@ -6,30 +7,28 @@ import "fontsource-roboto";
 import Home from "./pages/Home"
 import Login from './pages/Login';
 import SignUp from './pages/Signup';
+import { RefreshIsMobile } from "./actions/screen"
 
 export default function() {
-    const [ isMobile, setIsMobile ] = useState(false);
+        // ONLY here will RefreshIsMobile be called
+    const isMobile = useSelector(store => store.screen.isMobile);
 
     useEffect(() => {
-        setIsMobile( window.innerWidth <= 768 );
-
-            // not being triggered more than once
-        // document.addEventListener("resize", setIsMobile( window.innerWidth <= 768 ))
-        // console.log( "Detected Mobile: ", isMobile );
+        document.addEventListener("resize", RefreshIsMobile, false)
+        console.log( "Detected Mobile: ", isMobile );
 
         // return () => document.removeEventListener("resize", setIsMobile);    // this returned function runs when unmounted
-    })
+            // not being triggered more than once
+    }, [])
 
     return (
-        <>
+        <BrowserRouter>
             <NavBar isMobile={isMobile} />
-            <BrowserRouter>
-                <Route exact path="/" component={()=> <Home isMobile={isMobile} />}/>
+                <Route exact path="/" component={()=> <Home />}/>
                 <Route exact path="/login" component={() => <Login />} />
                 <Route exact path="/signup" component={() => <SignUp />} />
-            </BrowserRouter>
             {/* <SabjiArea isMobile={isMobile} /> */}
             <FooBar />
-        </>
+        </BrowserRouter>
     )
 }

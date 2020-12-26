@@ -12,16 +12,24 @@ export function LoginCustomer(uname, pass) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                username: uname,
-                password: pass
+                uname,
+                pass
             })
         }
-    ).then(response => response.json())
+    ).then(async response => {
+        if( response.ok ){
+            return response.json();
+        } else if(response.status === 500) {
+            throw {err: response.statusText};
+        } else {
+            throw await response.json();
+        }
+    })
 }
 
 export function SignupCustomer(uname, pass, contact) {
     const regObj = {
-        pass: pass,
+        pass
     }
 
     if( !contact ) {    // either contact empty or undefined

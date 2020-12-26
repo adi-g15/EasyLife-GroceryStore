@@ -1,29 +1,64 @@
-import { SignupCustomer } from "../services/user_service"
-import { STORE_USER, SIGNUP_SUCCESS, SIGNUP_FAIL } from "../constants/ActionTypes"
+import { LoginCustomer, SignupCustomer } from "../services/user_service"
+import { CLEAR_USER, STORE_USER } from "../constants/ActionTypes"
 
 /**
  * @note -> Saving to storages is the task of these action creators themselves, not the reducers, reducers only for modifying state, and services only for contacting the api
  */
 
-export function CustLoginCreator( uname, pass, rememberMe ) {
-    return (dispath) => {
-        
-    }
-}
-
-export const CustSignupCreator = ( uname, pass, contact, rememberMe ) => {
-    console.debug(uname,pass,contact,rememberMe);
-    const storage = rememberMe ? localStorage : sessionStorage;
+function clearStorage() {
     localStorage.removeItem('user');
     sessionStorage.removeItem('user');
     localStorage.removeItem('token');
-    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('token');    
+}
+
+function choseStorage(rememberMe) {
+    return rememberMe ? localStorage : sessionStorage;    
+}
+
+    // will work same for both admins and customers
+export const UniversalLogOutCreator = () => {
+    clearStorage();
+
+    return (dispatch) => dispatch(CLEAR_USER);
+}
+
+export function CustLoginCreator( uname, pass, rememberMe ) {
+    const storage = choseStorage(rememberMe);
+    clearStorage();
 
     return (dispatch) => {
-        console.debug(`Going to call signup service, recieved dispatch: `, dispatch, uname,pass,contact,rememberMe)
+        return LoginCustomer(uname, pass)
+            .then(data => {
+                console.debug("Success login service", data)
+                storage.setItem('user', JSON.stringify({
+                    uname: data.user.uname,
+                    contact: data.user.contact
+                }))
+                storage.setItem('token', data.token);    // should be a string by itself
+
+                dispatch({
+                    type: STORE_USER,
+                    payload: data.user   // token NOT required to be in store
+                })
+
+                return Promise.resolve();
+            })
+            .catch(err => { 
+                console.debug("Error login service", err)
+
+                throw err;
+            })
+    }
+}
+
+export function CustSignupCreator( uname, pass, contact, rememberMe ) {
+    const storage = choseStorage(rememberMe);
+    clearStorage();
+
+    return (dispatch) => {
         return SignupCustomer(uname, pass, contact)
             .then((data) => {
-            // .then(({user, token}) => {
                 console.debug("Success signup service", data)
                 storage.setItem('user', JSON.stringify({
                     uname: data.user.uname,
@@ -36,17 +71,10 @@ export const CustSignupCreator = ( uname, pass, contact, rememberMe ) => {
                     payload: data.user   // token NOT required to be in store
                 })
 
-                dispatch({
-                    type: SIGNUP_SUCCESS
-                })
-
                 return Promise.resolve();
             })
             .catch(err => {
                 console.debug("Error signup service", err)
-                dispatch({
-                    type: SIGNUP_FAIL
-                })
 
                 throw err;
             })

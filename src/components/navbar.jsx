@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom"
 import { connect } from "react-redux";
 import {
 	AppBar, 
@@ -59,10 +60,19 @@ const styling = makeStyles( theme => ({	// not naming useStyles Just to check
 function NavBar(props) {
 	// const [ isLoggedIn, setLoggedIn ] = useState(props.loggedIn || false);
 	// const [ cartTotal, setCartTotal ] = useState(249);
-	const cartContent = props.cart;
+	const history = useHistory();
 	// todo -> Instead of setCartTotal, fetch it from store, and change there itself
 
 	const classes = styling();
+
+	const handleAccClick = (e) => {
+		e.preventDefault();
+
+		if( ! props.isLoggedIn ){
+			history.push('/login');
+			window.location.reload();
+		}
+	}
 
 	return (
 		<header>
@@ -123,11 +133,15 @@ function NavBar(props) {
 							(
 								props.isMobile ? 
 								(
-									<Button>
+									<Button
+										// @future - this can be a DROPDOWN too
+										onClick={handleAccClick}
+									>
 										<AccountTree />
 									</Button>
 								):
 								(<Button
+									onClick={handleAccClick}
 									startIcon={<AccountTree/>}
 								>
 									{ !props.isMobile &&"Login"}
