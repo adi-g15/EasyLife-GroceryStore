@@ -1,5 +1,6 @@
 import React, { useRef } from "react"
 import { Link } from "react-router-dom"
+import { useDispatch } from "react-redux"
 import {
     Button,
     Checkbox,
@@ -10,7 +11,7 @@ import {
     makeStyles,
     Paper
 } from "@material-ui/core";
-import {  } from "../services/user_service";
+import { LoginCustomer } from "../services/user_service";
 
 const useStyles = makeStyles({
     boxContainer: {
@@ -28,13 +29,20 @@ export default function () {
     const passwordField = useRef(null);
     const rememberMeBox = useRef(null);
 
+    const dispatch = useDispatch();
+
     const classes = useStyles();
 
     function submitHandler(event) {
         event.preventDefault();
         event.target.disabled = true;
 
-        
+        const { user, token } = await LoginCustomer( usernameField.current.value, passwordField.current.value );
+        rememberMeBox.current.checked ? {
+            dispatch()
+        }: {
+            
+        };
 
         event.target.disabled = false;
     }
