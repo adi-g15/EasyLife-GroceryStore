@@ -25,19 +25,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-        /**
-         * @notes @advices about state ->
-         * 
-         * 1. only place where you should directly assign to state is the constructor
-         * 
-         * 2. Treat state like if it's immutable
-         * 
-         * 3. If the new state depends upon the previous state, PASS A FUNCTION TO setState() instead of directly accessing state, since multiple setState() calls maybe batched asychronously, in which case we may be accessing a newer state value, to prevent this, use the funciton, seince it receives the prevuious state
-         * 
-         * 4. State updates are merged (ie. the objects passed to setState() are merged will previous state)
-         * 
-         */
-export default function SabjiBox(props) {
+export default function CartBox(props) {
     const name = props.data.name || "Unknown";
     const price = props.data.price || 0;
     const unit = props.data.unit || 'kg';

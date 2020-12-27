@@ -9,8 +9,9 @@ const initialState = {
 }
 
 export default function filterReducer(state = initialState, action) {
-    switch (action.key) {
+    switch (action.type) {
         case SET_SEARCH:
+            console.debug('Updating query to ', action.payload, {...state, search: action.payload})
             return {
                 ...state,
                 search: action.payload

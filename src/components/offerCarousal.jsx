@@ -62,23 +62,19 @@ export default function OfferCarousal() {
     useEffect(() => {
         const handle = setInterval(() => {
             goRight();
-            clearInterval(handle);
         }, 3000);
+
+        return () => clearInterval(handle);
     })
 
     useEffect(async () => {
         if(offersLoading){
-            // const newOffers = await FetchOffers().catch(err => {console.error(err); return [];})
-            const newOffers = [
-                {product: "hi1", offer_brief: "bye10"},
-                {product: "hi2", offer_brief: "bye20"},
-                {product: "hi3", offer_brief: "bye40"},
-                {product: "hi4", offer_brief: "bye60"},
-                {product: "hi5", offer_brief: "bye80"}
-            ];
-
-            toggleOffersLoading(false);
-            setOffers(newOffers);
+            FetchOffers()
+                .then(newOffers => {
+                    toggleOffersLoading(false);
+                    setOffers(newOffers);
+                })
+                .catch(err => {console.error(err); return [];})
         }
     })
 

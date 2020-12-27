@@ -1,11 +1,15 @@
-import {} from "../constants/ActionTypes"
+import { SAVE_SABJIS } from "../constants/ActionTypes"
 
 const initialState = [] // simply just a list
 
     // ie. a ProductReducer
 export default function SabjiReducer (state = initialState, action ) {
-    switch (action.key) {
-        case SAVE_PRODUCTS:
+    switch (action.type) {
+        case SAVE_SABJIS:
+            console.log('Will send: ', [
+                ...state,
+                ...action.payload   // expecting an array
+            ]);
             return [
                 ...state,
                 ...action.payload   // expecting an array

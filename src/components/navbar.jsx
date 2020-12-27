@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom"
 import { connect } from "react-redux";
 import {
@@ -15,39 +15,10 @@ import {
 } from "@material-ui/core";
 import { AccountTree, ShoppingCartRounded, Search, AccountCircleRounded } from "@material-ui/icons";
 import "fontsource-righteous/400.css";
-import { SUBMIT_CART } from "../constants/ActionTypes";
+import { SubmitCartAction } from "../actions/cart"
+import { UpdateSearchAction } from "../actions/filter";
 
-const styling = makeStyles( theme => ({	// not naming useStyles Just to check
-	navbar: {
-		width: 'calc( 100% - 4px - 4vw )',  /*subtract border width from both sides + margins*/
-		backgroundColor: 'white',
-		borderColor: 'grey',
-		borderStyle: 'solid',
-		borderWidth: '1px',
-		borderRadius: '6px',
-		display: 'flex',
-		marginTop: '2vh',
-		marginBottom: '3vh',
-		marginLeft: '2vw',
-		marginRight: '2vw',
-	},
-	logo: {
-		fontSize: '1.2em',
-		justifyContent: 'center',
-		display: 'contents',
-	},
-	search: {
-		textAlign: 'left',
-		left: '50%',
-		display: 'flex',
-		justifyContent: 'center',
-		margin: '1.5vh 2vw',
-	},
-	search_input_type_search: {
-		borderRadius: '20px',
-		fontSize: '1.3em',
-		padding: '1vh 2vw',   /* it is padding: vertical horizontal*/
-	},
+const styling = makeStyles( theme => ({
 	toolbar: {
 		backgroundColor: theme.palette.common.white,
 	},
@@ -58,20 +29,30 @@ const styling = makeStyles( theme => ({	// not naming useStyles Just to check
 }))
 
 function NavBar(props) {
-	// const [ isLoggedIn, setLoggedIn ] = useState(props.loggedIn || false);
-	// const [ cartTotal, setCartTotal ] = useState(249);
 	const history = useHistory();
 	// todo -> Instead of setCartTotal, fetch it from store, and change there itself
 
+	let cartTotal = 5;
 	const classes = styling();
 
-	const handleAccClick = (e) => {
-		e.preventDefault();
+	useEffect(() => {
+		cartTotal = props.cart.length !== 0 ? props.cart.reduce((acc, curr) => (acc+curr)) : 0;
+	})
 
+	const handleAccClick = (e) => {
 		if( ! props.isLoggedIn ){
 			history.push('/login');
 			window.location.reload();
 		}
+	}
+
+	const handleCartClick = (e) => {
+		if( ! props.isLoggedIn ){
+			history.push('/login');
+			window.location.reload();
+		}
+
+		// alert("Please first Login... And your cart will still be stored, you don't have to think of that");
 	}
 
 	return (
@@ -98,6 +79,8 @@ function NavBar(props) {
 						variant="outlined" 
 						size="small" 
 						type="text"
+						value={props.search}
+						onChange={props.updateSearch}
 						InputProps={
 							{
 								startAdornment: (
@@ -109,12 +92,12 @@ function NavBar(props) {
 						}
 					/>)}
 					<ButtonGroup style={{marginLeft: props.isMobile ? 0 :20}}>
-					<Button variant="outlined" onClick={props.handleCart}>
+					<Button variant="outlined" onClick={handleCartClick}>
 						{
 							props.isMobile && (
 								<ShoppingCartRounded style={{marginRight: 6}} />)
 						}
-						₹{props.cartTotal}
+						₹{cartTotal}
 					</Button>
 					{props.isLoggedIn ? 
 							(
@@ -156,21 +139,21 @@ function NavBar(props) {
 }
 
 function mapStateToProps(state) {
-	window.state = state;
 	return {
 		isMobile: state.screen.isMobile,
-		cartTotal: state.cart.length !== 0 ? state.cart.reduce((acc, curr) => (acc+curr)) : 0,
-		isLoggedIn: state.user.isLoggedIn
+		cart: state.cart,
+		isLoggedIn: state.user.isLoggedIn,
+		search: state.filter.search
 	};
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
-		handleCart: (e) => {
-			e.preventDefault();
-
-			// return Promise
-			dispatch({type: SUBMIT_CART});
+		updateSearch: (e) => {
+			// @note - Come here;be sure to sanitize the string here
+			// After this do minor change to cart boxes, and verify all works well
+			console.debug(e.target.value);
+			dispatch( UpdateSearchAction( e.target.value ) );
 		}
 	}
 }

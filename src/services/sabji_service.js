@@ -9,7 +9,12 @@ export function FetchPrices() {
                 "Accept": "application/json"
             }
         }
-    ).then(response => response.json())
-        .then(data => data.data)
-        .catch((err) => {console.error(err); return [];})
+    ).then( response => {
+            if( response.ok ){
+                return response.json();
+            } else {
+                return {data: []};  // ignoring any SERVER SIDE errors, and just considering data as empty array then
+            }
+    })
+    .then( data => data.data )
 }
