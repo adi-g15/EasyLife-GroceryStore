@@ -9,9 +9,18 @@ import {
 export default function LoadingBox(){
 	return (
 		<Grid item>
-			<Card>
-				<CardActionArea>
-					<Typography variant="h6">
+			<Card style={{
+				padding: "5%",
+				margin: "5%"
+			}}>
+				<CardActionArea style={{
+					padding: "5%",
+					margin: "5%"
+				}}>
+					<Typography variant="h6"  style={{
+						padding: "5%",
+						margin: "5%"
+					}}>
                         Loading...
 					</Typography>
 				</CardActionArea>

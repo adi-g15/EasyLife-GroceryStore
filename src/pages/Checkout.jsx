@@ -1,7 +1,7 @@
 import React from "react";
 import CartBox from "../components/cartbox";
 import { useSelector } from "react-redux";
-import { makeStyles } from "@material-ui/core";
+import { Container, Grid, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles({
 	cartArea: {
@@ -20,16 +20,25 @@ export default function CartPage() {
 
 	return (
 		<>
-			<div className={classes.cartArea}>
-				{
-					cart.map(
-						(sabji, index) => (<CartBox data={sabji} key={index} />)
-					)
-				}
-			</div>
+			<Container>
+				<div className={classes.cartArea}>
+					{
+						cart.map(
+							(sabji, index) => (<CartBox org_data={ findSabjiById( cart, sabji.id) } key={sabji.id} />)
+						)
+					}
+				</div>
+			</Container>
 			<div className={classes.totalArea}>
                 Current Cart Total is {cartTotal}
 			</div>
 		</>
 	);
+}
+
+
+function findSabjiById( sabjis, id ) {
+	if( Array.isArray(sabjis) ) {
+		return sabjis.find((sabji) => sabji.id === id);
+	}
 }

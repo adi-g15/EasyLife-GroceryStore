@@ -26,11 +26,7 @@ const styling = makeStyles( theme => ({
 		backgroundColor: theme.palette.common.white,
 		paddingLeft: 2
 	},
-	// SearchBarMin: {
-	// 	width: "20vw",
-	// },
 	SearchBar: {
-		// transitionDuration: "0.5s",
 		width: "30vw"
 	}
 }));
