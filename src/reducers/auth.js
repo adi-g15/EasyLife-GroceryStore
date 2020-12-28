@@ -9,7 +9,7 @@ const initialState = {
 	isLoggedIn: user ? true: false
 };
 
-export default function UserReducer( state = initialState, action){
+export default function AuthReducer( state = initialState, action){
 	console.debug("Received : ", action);
 	switch (action.type) {
 	case STORE_AUTH: {

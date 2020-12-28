@@ -68,7 +68,7 @@ export function CustSignupCreator( uname, pass, contact, rememberMe ) {
 
 				dispatch({
 					type: STORE_AUTH,
-					payload: data.user   // token NOT required to be in store
+					payload: data   // token NOT required to be in store
 				});
 
 				return Promise.resolve();
