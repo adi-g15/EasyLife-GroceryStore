@@ -1,5 +1,5 @@
 import { LoginCustomer, SignupCustomer } from "../services/user_service";
-import { CLEAR_USER, STORE_USER } from "../constants/ActionTypes";
+import { CLEAR_USER, STORE_AUTH } from "../constants/ActionTypes";
 
 /**
  * @note -> Saving to storages is the task of these action creators themselves, not the reducers, reducers only for modifying state, and services only for contacting the api
@@ -20,7 +20,7 @@ function choseStorage(rememberMe) {
 export const UniversalLogOutCreator = () => {
 	clearStorage();
 
-	return (dispatch) => dispatch(CLEAR_USER);
+	return (dispatch) => dispatch({type: CLEAR_USER});
 };
 
 export function CustLoginCreator( uname, pass, rememberMe ) {
@@ -38,8 +38,8 @@ export function CustLoginCreator( uname, pass, rememberMe ) {
 				storage.setItem("token", data.token);    // should be a string by itself
 
 				dispatch({
-					type: STORE_USER,
-					payload: data.user   // token NOT required to be in store
+					type: STORE_AUTH,
+					payload: data   // token NOT required to be in store
 				});
 
 				return Promise.resolve();
@@ -67,7 +67,7 @@ export function CustSignupCreator( uname, pass, contact, rememberMe ) {
 				storage.setItem("token", data.token);    // should be a string by itself
 
 				dispatch({
-					type: STORE_USER,
+					type: STORE_AUTH,
 					payload: data.user   // token NOT required to be in store
 				});
 

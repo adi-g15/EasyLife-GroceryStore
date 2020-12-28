@@ -3,7 +3,6 @@ import LoadingBox from "./loadingBox";
 import { Grid } from "@material-ui/core";
 
 export default function LoadingBoxArea(props){
-	console.debug(props.num);
 	const tmpList = [];
 	for (let i = 0; i < props.num || 0; i++) {
 		tmpList.push(i);

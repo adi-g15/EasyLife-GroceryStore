@@ -16,6 +16,7 @@ import {
 import { AccountTree, ShoppingCartRounded, Search, AccountCircleRounded } from "@material-ui/icons";
 import "fontsource-righteous/400.css";
 import { UpdateSearchAction } from "../actions/filter";
+import { UniversalLogOutCreator } from "../actions/auth";
 
 const styling = makeStyles( theme => ({
 	toolbar: {
@@ -24,6 +25,9 @@ const styling = makeStyles( theme => ({
 	mobile_toolbar: {
 		backgroundColor: theme.palette.common.white,
 		paddingLeft: 2
+	},
+	SearchBar: {
+		width: "40vw"
 	}
 }));
 
@@ -36,12 +40,12 @@ function NavBar(props) {
 
 	useEffect(() => {
 		cartTotal = props.cart.length !== 0 ? props.cart.reduce((acc, curr) => (acc+curr)) : 0;
-	});
+	}, [props.cart]);
 
 	const handleAccClick = () => {
 		if( ! props.isLoggedIn ){
 			history.push("/login");
-			window.location.reload();
+			// window.location.reload();
 		}
 	};
 
@@ -80,6 +84,7 @@ function NavBar(props) {
 								type="text"
 								value={props.search}
 								onChange={props.updateSearch}
+								className={classes.SearchBar}
 								InputProps={
 									{
 										startAdornment: (
@@ -107,9 +112,11 @@ function NavBar(props) {
 										</Button>
 									):
 									(<Button
+										onClick={props.logoutUser}
 										startIcon={<AccountCircleRounded/>}
 									>
-									Account
+										{/* Profile */}
+										Logout
 									</Button>)
 							) :
 							(
@@ -138,21 +145,27 @@ function NavBar(props) {
 }
 
 function mapStateToProps(state) {
+	const { screen, cart, auth, filter } = state;
+
 	return {
-		isMobile: state.screen.isMobile,
-		cart: state.cart,
-		isLoggedIn: state.user.isLoggedIn,
-		search: state.filter.search
+		isMobile: screen.isMobile,
+		cart: cart,
+		user: auth.user,
+		isLoggedIn: auth.isLoggedIn,
+		search: filter.search
 	};
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
+		logoutUser: () => {
+			dispatch( UniversalLogOutCreator() );
+
+			alert("You have been successfully Logged Out");
+		},
 		updateSearch: (e) => {
 			// @note - Come here;be sure to sanitize the string here
 			// After this do minor change to cart boxes, and verify all works well
-			console.debug(e.target.value);
-
 			dispatch(UpdateSearchAction( 
 				e.target.value.slice(
 					0,

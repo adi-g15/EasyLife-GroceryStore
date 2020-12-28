@@ -11,7 +11,7 @@ import {
 	makeStyles,
 	Paper
 } from "@material-ui/core";
-import { CustLoginCreator } from "../actions/cust";
+import { CustLoginCreator } from "../actions/auth";
 
 const useStyles = makeStyles({
 	boxContainer: {
@@ -46,7 +46,7 @@ export default function SignUpPage() {
 				console.debug("Successful");
 
 				history.push("/"); // @future -> When profile page is okay, redirect to '/me' route instead
-				window.location.reload();
+				// window.location.reload();
 			})
 			.catch((err) => {
 				console.error(err);
@@ -93,6 +93,7 @@ export default function SignUpPage() {
 							placeholder="Enter your password..."
 							helperText="Shh... Password"
 							margin="normal"
+							type="password"
 							fullWidth
 							required
 							onChange={(e) => setPassword(e.target.value)}

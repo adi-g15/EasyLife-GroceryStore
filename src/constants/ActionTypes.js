@@ -14,7 +14,7 @@ export const DECREASE_QUANTITY = "DECREASE_QUANTITY";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CLEAR_CART = "CLEAR_CART";
 
-export const STORE_USER = "STORE_USER";  // for login
+export const STORE_AUTH = "STORE_AUTH";  // for login
 export const CLEAR_USER = "CLEAR_USER";  // for logout
 
 export const REFRESH_SCREEN = "REFRESH_SCREEN";

@@ -12,8 +12,8 @@ import {
 	Paper,
 	InputAdornment
 } from "@material-ui/core";
-import { CustSignupCreator } from "../actions/cust";
-import {} from "../actions/cust";
+import { CustSignupCreator } from "../actions/auth";
+import {} from "../actions/auth";
 
 const useStyles = makeStyles({
 	boxContainer: {
@@ -107,7 +107,7 @@ export default function SignUpPage() {
 			.then(() => {
 				console.debug("Successful");
 				history.push("/"); // @future -> When profile page is okay, redirect to '/me' route instead
-				window.location.reload();
+				// window.location.reload();
 			})
 			.catch((err) => {
 				console.error(err);
