@@ -15,11 +15,7 @@ import {
 	Paper,
 	makeStyles
 } from "@material-ui/core";
-import {
-	Add,
-	Remove,
-	// AddShoppingCart	// Good but can be confusing
-} from "@material-ui/icons";
+import { PlusOne } from "@material-ui/icons";
 import { AddToCartAction, DecrementQuantity, IncrementQuantity } from "../actions/cart";
 
 const useStyles = makeStyles(theme => ({
@@ -28,13 +24,6 @@ const useStyles = makeStyles(theme => ({
 	},
 	priceBtn: {
 		backgroundColor: theme.shape.borderRadius
-	},
-	qnttyBtn: {
-		position: "relative",
-		marginLeft: theme.spacing(1)
-	},
-	btnArea: {
-		width: "100%"
 	}
 }));
 
@@ -50,10 +39,10 @@ const useStyles = makeStyles(theme => ({
          * 4. State updates are merged (ie. the objects passed to setState() are merged will previous state)
          * 
          */
-function SabjiBox(props) {
+function CartBox(props) {
 	// const index = props.index;	// not using this for now @future @me -> This may give better performace since with each increment or decrement call, we wo't need o findIndexById()
-	const { name, price, unit } = props.data;
-	const [qntty, setQntty] = useState(props.data.qntty);
+	const { name, price, unit } = props.org_data;
+	const [qntty, setQntty] = useState(props.org_data.qntty);
 
 	const classes = useStyles();
 
@@ -77,7 +66,7 @@ function SabjiBox(props) {
 
 	return (
 		<>
-			<Card className={classes.root} >
+			<Card className={classes.root}>
 				<CardActionArea >
 					<CardMedia 
 						component="img"
@@ -112,34 +101,34 @@ function SabjiBox(props) {
 						</Typography>
 					</CardContent>
 				</CardActionArea>
-				<CardActions className={classes.btnArea}>
+				<CardActions>
 					<ButtonGroup>
-						<IconButton
+						<Button
 							color="secondary"
 							onClick={decreaseQntty}
+							variant="text"
 						>
-							<Remove />
-						</IconButton>
-						{/* (<Button
+							<strong>-1</strong>
+						</Button>
+						{qntty >= 1 ? (
+							<Button 
+								variant="text"
+								disabled
+							>
+								{qntty}
+							</Button>): 
+							(<Button
 								onClick={addToCart}
 							>
                             Add
 							</Button>)
-						} */}
+						}
 						<IconButton 
 							onClick={increaseQntty}
 							color="secondary">
-							<Add />
+							<PlusOne />
 						</IconButton>
 					</ButtonGroup>
-					{qntty >= 1 && (
-						<Fab
-							size="small"
-							className={classes.qnttyBtn}
-						>
-							{qntty}
-						</Fab>
-					)}
 				</CardActions>
 			</Card>
 		</>
@@ -148,10 +137,10 @@ function SabjiBox(props) {
 
 function mapDispatchToProps(dispatch, orgProps) {
 	return {
-		add_to_cart: () => dispatch( AddToCartAction(orgProps.data.id) ),
-		decrement_qntty: () => dispatch( DecrementQuantity(orgProps.data.id) ),
-		increment_qntty: () => dispatch( IncrementQuantity(orgProps.data.id) ),
+		add_to_cart: () => dispatch( AddToCartAction(orgProps.org_data.id) ),
+		decrement_qntty: () => dispatch( DecrementQuantity(orgProps.org_data.id) ),
+		increment_qntty: () => dispatch( IncrementQuantity(orgProps.org_data.id) ),
 	};
 }
 
-export default connect(null, mapDispatchToProps)(SabjiBox);
+export default connect(null, mapDispatchToProps)(CartBox);

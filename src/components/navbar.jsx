@@ -11,7 +11,8 @@ import {
 	Toolbar, 
 	Typography, 
 	Button,
-	IconButton
+	IconButton,
+	Link
 } from "@material-ui/core";
 import { AccountTree, ShoppingCartRounded, Search, AccountCircleRounded } from "@material-ui/icons";
 import "fontsource-righteous/400.css";
@@ -28,6 +29,9 @@ const styling = makeStyles( theme => ({
 	},
 	SearchBar: {
 		width: "30vw"
+	},
+	logoLink: {
+		textDecoration: "none"
 	}
 }));
 
@@ -76,8 +80,10 @@ function NavBar(props) {
 					<Container>
 						{/* <img src="/logo.png" alt="EasyLife" height="75%"/> */}
 						<Typography variant="h4" style={{fontFamily: "Righteous"}}>
-							<span style={{color: "orange"}}>Easy</span>
-							<span style={{color: "green"}}>Life</span>
+							<Link href="/" className={classes.logoLink}>
+								<span style={{color: "orange"}}>Easy</span>
+								<span style={{color: "green"}}>Life</span>
+							</Link>
 						</Typography>
 					</Container>
 					{

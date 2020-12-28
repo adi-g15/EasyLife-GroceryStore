@@ -56,14 +56,17 @@ export function AddToCartAction(sabji_id) {
 }
 
 export function RemoveFromCartAction (sabji_id) {
-	return (dispatch, {cart}) => {
-		if( findIndexById(cart, sabji_id) === -1 ) {
+	return (dispatch, getState) => {
+		const state = getState();
+		console.log(state);
+		const index = findIndexById(state.cart, sabji_id);
+		if( index === -1 ) {
 			return; // if NOT present, then return
 		}
 
 		dispatch({
 			type: REMOVE_FROM_CART,
-			payload: findIndexById(cart, sabji_id)   // then dispatch will splice this index
+			payload: index   // then dispatch will splice this index
 		});
 	};
 }
@@ -84,12 +87,12 @@ export function IncrementQuantity (sabji_id) {
 
 export function DecrementQuantity (sabji_id) {
 	return (dispatch, getState) => {
-		const cart = getState().cart;
+		const {cart} = getState();
 		let index = findIndexById(cart, sabji_id);
 		if( index === -1 ) {
 			return; // not present, DO NOTHING
 		} else if( cart[index].qntty === 1 ) {  // if only one was present, then remove that item
-			return RemoveFromCartAction(sabji_id)(dispatch, {cart});
+			return RemoveFromCartAction(sabji_id)(dispatch, getState);
 		}
 
 		dispatch({

@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
 		marginBottom: 30
 	},
 	details: {
-		textAlign: "start",
 		display: "flex",
 		width: "100%"	// since it's flexbox, now the action buttons will be stacked on left
 	},
