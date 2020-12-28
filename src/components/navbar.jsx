@@ -15,7 +15,6 @@ import {
 } from "@material-ui/core";
 import { AccountTree, ShoppingCartRounded, Search, AccountCircleRounded } from "@material-ui/icons";
 import "fontsource-righteous/400.css";
-import { SubmitCartAction } from "../actions/cart"
 import { UpdateSearchAction } from "../actions/filter";
 
 const styling = makeStyles( theme => ({
@@ -153,7 +152,13 @@ function mapDispatchToProps(dispatch) {
 			// @note - Come here;be sure to sanitize the string here
 			// After this do minor change to cart boxes, and verify all works well
 			console.debug(e.target.value);
-			dispatch( UpdateSearchAction( e.target.value ) );
+
+			dispatch(UpdateSearchAction( 
+				e.target.value.slice(
+					0,
+					e.target.value.length - ( e.target.value.endsWith('/') ? 1: 0 )
+				)
+			));
 		}
 	}
 }
