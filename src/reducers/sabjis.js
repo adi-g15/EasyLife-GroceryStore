@@ -6,9 +6,6 @@ const initialState = []; // simply just a list
 export default function SabjiReducer (state = initialState, action ) {
 	switch (action.type) {
 	case SAVE_SABJIS:
-		console.log("Will send: ", [
-			...action.payload   // expecting an array
-		]);
 		return [
 			...action.payload   // expecting an array
 		];

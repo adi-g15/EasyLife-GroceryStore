@@ -37,7 +37,7 @@ export default function SabjiArea() {
 		nameRegex = RegExp(nameFilter, "i");
 	}, [nameFilter]);
 
-	useEffect(async () => {
+	useEffect(() => {
 		// set the boxes as loading
 		if(loading){
 			dispatch(FetchSabjiAction())
@@ -46,7 +46,7 @@ export default function SabjiArea() {
 					setLoading(false);
 				});
 		}
-	});
+	}, [loading]);
 
 	return (
 		<>

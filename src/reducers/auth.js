@@ -10,7 +10,6 @@ const initialState = {
 };
 
 export default function AuthReducer( state = initialState, action){
-	console.debug("Received : ", action);
 	switch (action.type) {
 	case STORE_AUTH: {
 		const {user, token} = action.payload;

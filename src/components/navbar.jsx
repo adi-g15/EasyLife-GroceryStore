@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import {
@@ -26,8 +26,12 @@ const styling = makeStyles( theme => ({
 		backgroundColor: theme.palette.common.white,
 		paddingLeft: 2
 	},
+	// SearchBarMin: {
+	// 	width: "20vw",
+	// },
 	SearchBar: {
-		width: "40vw"
+		// transitionDuration: "0.5s",
+		width: "30vw"
 	}
 }));
 
@@ -35,28 +39,39 @@ function NavBar(props) {
 	const history = useHistory();
 	// todo -> Instead of setCartTotal, fetch it from store, and change there itself
 
-	let cartTotal = 5;
+	const [cartTotal, setCartTotal] = useState( props.cart.length !== 0 ? props.cart.reduce((acc, curr) => acc +( curr.price * curr.qntty ), 0) : 0 );
 	const classes = styling();
+	// const [searchOnFocus, toggleSearchOnFocus] = useState(false);	// will use when experimental serach bar used IN FUTURE (LIKELY NOT though :( )
 
 	useEffect(() => {
-		cartTotal = props.cart.length !== 0 ? props.cart.reduce((acc, curr) => (acc+curr)) : 0;
+		setCartTotal( props.cart.length !== 0 ? props.cart.reduce((acc, curr) => acc +( curr.price * curr.qntty ), 0) : 0);
 	}, [props.cart]);
-
+ 
 	const handleAccClick = () => {
 		if( ! props.isLoggedIn ){
 			history.push("/login");
 			// window.location.reload();
+		} else {
+			console.log("You are already logged in");
 		}
 	};
 
 	const handleCartClick = () => {
 		if( ! props.isLoggedIn ){
 			history.push("/login");
-			window.location.reload();
+			return;
+			// window.location.reload();
 		}
 
+		history.push("/checkout");
 		// alert("Please first Login... And your cart will still be stored, you don't have to think of that");
 	};
+
+	function searchSubmit(e) {
+		e.preventDefault();
+
+		history.push("/search");
+	}
 
 	return (
 		<header>
@@ -76,25 +91,31 @@ function NavBar(props) {
 									<Search />
 								</IconButton>
 							):
-							(<TextField 
-								// style={styling.search}
-								label="Search..." 
-								variant="outlined" 
-								size="small" 
-								type="text"
-								value={props.search}
-								onChange={props.updateSearch}
-								className={classes.SearchBar}
-								InputProps={
-									{
-										startAdornment: (
-											<InputAdornment position="start">
-												<Search />
-											</InputAdornment>
-										)
-									}
-								}
-							/>)}
+							(
+								<form
+									onSubmit={searchSubmit}
+								>
+									<TextField 
+										// style={styling.search}
+										label="Search..."
+										variant="outlined" 
+										size="small" 
+										type="text"
+										value={props.search}
+										onChange={props.updateSearch}
+										className={ classes.SearchBar }
+										InputProps={
+											{
+												startAdornment: (
+													<InputAdornment position="start">
+														<Search />
+													</InputAdornment>
+												)
+											}
+										}
+									/>
+								</form>
+							)}
 					<ButtonGroup style={{marginLeft: props.isMobile ? 0 :20}}>
 						<Button variant="outlined" onClick={handleCartClick}>
 							{

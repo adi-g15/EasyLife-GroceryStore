@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { BrowserRouter, Route } from "react-router-dom";
 import NavBar from "./components/navbar";
 import FooBar from "./components/footer";
@@ -31,6 +31,7 @@ export default function App() {
 		<BrowserRouter>
 			<NavBar isMobile={isMobile} />
 			<Route exact path="/" component={()=> <Home />}/>
+			<Route exact path="/search" component={()=> <Home />}/>
 			<Route exact path="/login" component={() => <Login />} />
 			<Route exact path="/signup" component={() => <SignUp />} />
 			<Route exact path="/checkout" component={() => <Checkout />} />

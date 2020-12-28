@@ -29,12 +29,12 @@ function cartReducer(state = initialState, action) {
 		return [];
 
 	case ADD_TO_CART:
+		payload.qntty = Math.max( payload.qntty, 1 );	// if already something. then leave it be
 		newState.push( {...payload} );
-		payload.qntty = payload.qntty || 1;	// if already something. then leave it be
 		break;
 
 	case REMOVE_FROM_CART:
-		newState.slice( payload, 1 );	// remove 1 element at payload position
+		newState.splice( payload, 1 );	// remove 1 element at payload position
 		break;
 
 	case INCREASE_QUANTITY:
@@ -42,14 +42,13 @@ function cartReducer(state = initialState, action) {
 		break;
 
 	case DECREASE_QUANTITY:
-		newState[ payload ].qntty -= 1;
+		newState[payload].qntty = Math.max( 0, newState[ payload ].qntty - 1 );
 		break;
 
 	default:
 		return state;
 	}
 
-	console.log("Adding to storage");
 	localStorage.setItem("cart", JSON.stringify(newState));
 	return newState;
 }

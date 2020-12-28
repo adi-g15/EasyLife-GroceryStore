@@ -47,9 +47,10 @@ export function AddToCartAction(sabji_id) {
 		const sabjiIndex = findIndexById( state.sabjis, sabji_id );
 		if( sabjiIndex === -1 )	return;	// sabji doesn't exist in sabjis state
 
+		state.sabjis[sabjiIndex].qntty = Math.max( state.sabjis[sabjiIndex].qntty, 1 );	// if already something. then leave it be
 		dispatch({
 			type: ADD_TO_CART,
-			payload: state.sabjis[sabjiIndex]
+			payload: state.sabjis[sabjiIndex]	// copy made by reducer itself
 		});
 	};
 }
@@ -71,7 +72,7 @@ export function IncrementQuantity (sabji_id) {
 	return (dispatch, getState) => {
 		const cart = getState().cart;
 		if( findIndexById(cart, sabji_id) === -1 ) {
-			return AddToCartAction(sabji_id, true)(dispatch);
+			return AddToCartAction(sabji_id, true)(dispatch, getState);
 		}
 
 		dispatch({
