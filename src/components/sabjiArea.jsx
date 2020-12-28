@@ -16,7 +16,7 @@ const useStyles = makeStyles({
 	}
 });
 
-export default function SabjiArea(props) {
+export default function SabjiArea() {
 
 	const numLoadingBoxes = 2;   // number of boxes that will be shown as loading, till data isn't finally received from the server
 	const [loading, setLoading] = useState(true);
@@ -25,7 +25,7 @@ export default function SabjiArea(props) {
 	// const [sortingOrder, setSortingOrder] = useState(null)
 	const isMobile = useSelector(state => state.screen.isMobile);
 	const nameFilter = useSelector(state => state.filter.search);
-	let nameRegex = RegExp(nameFilter, 'i');	// case insensitive
+	let nameRegex = RegExp(nameFilter, "i");	// case insensitive
 
 	const classes = useStyles();
 	const dispatch = useDispatch();
@@ -33,16 +33,16 @@ export default function SabjiArea(props) {
 	const list = useSelector(state => state.sabjis);
 
 	useEffect(() => {
-		nameRegex = RegExp(nameFilter, 'i');
-	}, [nameFilter])
+		nameRegex = RegExp(nameFilter, "i");
+	}, [nameFilter]);
 
 	useEffect(async () => {
 		// set the boxes as loading
 		if(loading){
 			dispatch(FetchSabjiAction())
-				.finally(() => setLoading(false))
+				.finally(() => setLoading(false));
 		}
-	})
+	});
 
 	return (
 		<>
@@ -50,20 +50,20 @@ export default function SabjiArea(props) {
 				<LoadingBoxArea num={numLoadingBoxes} />
 				: (<Container>
 					<Grid container spacing={ isMobile ? 2 : 4} className={classes.container} justify="center">
-					{
-						list.filter(
-							(sabji) => nameRegex.test(sabji.name)
-						).map(
-							(sabji, index) => (
-								<Grid item xs={6} sm={4} md={3} style={{textAlign: 'center'}} key={index}>
-									<SabjiBox data={sabji} key={sabji.id} />
-								</Grid>
+						{
+							list.filter(
+								(sabji) => nameRegex.test(sabji.name)
+							).map(
+								(sabji, index) => (
+									<Grid item xs={6} sm={4} md={3} style={{textAlign: "center"}} key={index}>
+										<SabjiBox data={sabji} key={sabji.id} />
+									</Grid>
+								)
 							)
-						)
-					}
+						}
 					</Grid>
 				</Container>)
 			}
 		</>
-	)
+	);
 }

@@ -1,35 +1,35 @@
-import React from "react"
+import React from "react";
 import CartBox from "../components/cartbox";
-import { useSelector } from "react-redux"
+import { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles({
-    cartArea: {
+	cartArea: {
         
-    },
-    totalArea: {
+	},
+	totalArea: {
         
-    }
+	}
 });
 
 export default function CartPage() {
-    const cart = useSelector(state => state.cart) || [];
+	const cart = useSelector(state => state.cart) || [];
 
-    const cartTotal = cart.reduce((accumuate, curr) => accumuate + curr);
-    const classes = useStyles();
+	const cartTotal = cart.reduce((accumuate, curr) => accumuate + curr);
+	const classes = useStyles();
 
-    return (
-        <>
-            <div className={classes.cartArea}>
-                {
-                    cart.map(
-                        (sabji, index) => (<CartBox data={sabji} key={index} />)
-                    )
-                }
-            </div>
-            <div className={classes.totalArea}>
+	return (
+		<>
+			<div className={classes.cartArea}>
+				{
+					cart.map(
+						(sabji, index) => (<CartBox data={sabji} key={index} />)
+					)
+				}
+			</div>
+			<div className={classes.totalArea}>
                 Current Cart Total is {cartTotal}
-            </div>
-        </>
-    )
+			</div>
+		</>
+	);
 }

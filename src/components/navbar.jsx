@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom"
+import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import {
 	AppBar, 
@@ -25,7 +25,7 @@ const styling = makeStyles( theme => ({
 		backgroundColor: theme.palette.common.white,
 		paddingLeft: 2
 	}
-}))
+}));
 
 function NavBar(props) {
 	const history = useHistory();
@@ -36,23 +36,23 @@ function NavBar(props) {
 
 	useEffect(() => {
 		cartTotal = props.cart.length !== 0 ? props.cart.reduce((acc, curr) => (acc+curr)) : 0;
-	})
+	});
 
-	const handleAccClick = (e) => {
+	const handleAccClick = () => {
 		if( ! props.isLoggedIn ){
-			history.push('/login');
+			history.push("/login");
 			window.location.reload();
 		}
-	}
+	};
 
-	const handleCartClick = (e) => {
+	const handleCartClick = () => {
 		if( ! props.isLoggedIn ){
-			history.push('/login');
+			history.push("/login");
 			window.location.reload();
 		}
 
 		// alert("Please first Login... And your cart will still be stored, you don't have to think of that");
-	}
+	};
 
 	return (
 		<header>
@@ -60,81 +60,81 @@ function NavBar(props) {
 				<Toolbar className={ props.isMobile ? classes.mobile_toolbar : classes.toolbar}>
 					<Container>
 						{/* <img src="/logo.png" alt="EasyLife" height="75%"/> */}
-						<Typography variant="h4" style={{fontFamily: 'Righteous'}}>
-							<span style={{color: 'orange'}}>Easy</span>
-							<span style={{color: 'green'}}>Life</span>
+						<Typography variant="h4" style={{fontFamily: "Righteous"}}>
+							<span style={{color: "orange"}}>Easy</span>
+							<span style={{color: "green"}}>Life</span>
 						</Typography>
 					</Container>
 					{
-					 props.isMobile ? 
-					 (
-						<IconButton>
-							<Search />
-						</IconButton>
-					 ): 
-					 (<TextField 
-						// style={styling.search}
-						label="Search..." 
-						variant="outlined" 
-						size="small" 
-						type="text"
-						value={props.search}
-						onChange={props.updateSearch}
-						InputProps={
-							{
-								startAdornment: (
-									<InputAdornment position="start">
-										<Search />
-									</InputAdornment>
-								)
-							}
-						}
-					/>)}
+						props.isMobile ? 
+							(
+								<IconButton>
+									<Search />
+								</IconButton>
+							):
+							(<TextField 
+								// style={styling.search}
+								label="Search..." 
+								variant="outlined" 
+								size="small" 
+								type="text"
+								value={props.search}
+								onChange={props.updateSearch}
+								InputProps={
+									{
+										startAdornment: (
+											<InputAdornment position="start">
+												<Search />
+											</InputAdornment>
+										)
+									}
+								}
+							/>)}
 					<ButtonGroup style={{marginLeft: props.isMobile ? 0 :20}}>
-					<Button variant="outlined" onClick={handleCartClick}>
-						{
-							props.isMobile && (
-								<ShoppingCartRounded style={{marginRight: 6}} />)
-						}
+						<Button variant="outlined" onClick={handleCartClick}>
+							{
+								props.isMobile && (
+									<ShoppingCartRounded style={{marginRight: 6}} />)
+							}
 						₹{cartTotal}
-					</Button>
-					{props.isLoggedIn ? 
+						</Button>
+						{props.isLoggedIn ? 
 							(
 								props.isMobile ? 
-								(
-									<Button>
-										<AccountCircleRounded />
-									</Button>
-								):
-								(<Button
-									startIcon={<AccountCircleRounded/>}
-								>
+									(
+										<Button>
+											<AccountCircleRounded />
+										</Button>
+									):
+									(<Button
+										startIcon={<AccountCircleRounded/>}
+									>
 									Account
-								</Button>)
+									</Button>)
 							) :
 							(
 								props.isMobile ? 
-								(
-									<Button
+									(
+										<Button
 										// @future - this can be a DROPDOWN too
+											onClick={handleAccClick}
+										>
+											<AccountTree />
+										</Button>
+									):
+									(<Button
 										onClick={handleAccClick}
+										startIcon={<AccountTree/>}
 									>
-										<AccountTree />
-									</Button>
-								):
-								(<Button
-									onClick={handleAccClick}
-									startIcon={<AccountTree/>}
-								>
-									{ !props.isMobile &&"Login"}
-								</Button>)
+										{ !props.isMobile &&"Login"}
+									</Button>)
 							)
 						}
 					</ButtonGroup>
 				</Toolbar>
 			</AppBar>
 		</header>
-	)
+	);
 }
 
 function mapStateToProps(state) {
@@ -156,11 +156,11 @@ function mapDispatchToProps(dispatch) {
 			dispatch(UpdateSearchAction( 
 				e.target.value.slice(
 					0,
-					e.target.value.length - ( e.target.value.endsWith('/') ? 1: 0 )
+					e.target.value.length - ( e.target.value.endsWith("/") ? 1: 0 )
 				)
 			));
 		}
-	}
+	};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

@@ -7,10 +7,10 @@
 
 import { ADD_TO_CART, CLEAR_CART, REMOVE_FROM_CART, INCREASE_QUANTITY, DECREASE_QUANTITY } from "../constants/ActionTypes";
 
-var data = JSON.parse(localStorage.getItem('cart'));
+var data = JSON.parse(localStorage.getItem("cart"));
 const initialState = data ? data : [];
 
-	// the state in our case is just an ARRAY
+// the state in our case is just an ARRAY
 function cartReducer(state = initialState, action) {
 	/**
 	 * @question -> Does each reducer receives the COMPLETE REDUX STATE ?
@@ -24,31 +24,31 @@ function cartReducer(state = initialState, action) {
 	let newState = [...state];
 
 	switch (type) {
-		case CLEAR_CART:
-			localStorage.removeItem('cart');
-			return []
+	case CLEAR_CART:
+		localStorage.removeItem("cart");
+		return [];
 
-		case ADD_TO_CART:
-			newState.push( payload );
-			break;
+	case ADD_TO_CART:
+		newState.push( payload );
+		break;
 
-		case REMOVE_FROM_CART:
-			newState.slice( payload, 1 );	// remove 1 element at payload position
-			break;
+	case REMOVE_FROM_CART:
+		newState.slice( payload, 1 );	// remove 1 element at payload position
+		break;
 
-		case INCREASE_QUANTITY:
-			newState[ payload ].qntty += 1;
-			break;
+	case INCREASE_QUANTITY:
+		newState[ payload ].qntty += 1;
+		break;
 
-		case DECREASE_QUANTITY:
-			newState[ payload ].qntty -= 1;
-			break;
+	case DECREASE_QUANTITY:
+		newState[ payload ].qntty -= 1;
+		break;
 
-		default:
-			return state;
+	default:
+		return state;
 	}
 
-	localStorage.setItem('cart', JSON.stringify(newState));
+	localStorage.setItem("cart", JSON.stringify(newState));
 	return newState;
 }
 
