@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { 
 	Card, 
 	CardActionArea, 
@@ -14,7 +15,8 @@ import {
 	Paper,
 	makeStyles
 } from "@material-ui/core";
-import { PlusOne, FormatIndentDecrease } from "@material-ui/icons";
+import { PlusOne } from "@material-ui/icons";
+import { AddToCartAction, DecrementQuantity, IncrementQuantity } from "../actions/cart";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -37,20 +39,29 @@ const useStyles = makeStyles(theme => ({
          * 4. State updates are merged (ie. the objects passed to setState() are merged will previous state)
          * 
          */
-export default function SabjiBox(props) {
-	const name = props.data.name || "Unknown";
-	const price = props.data.price || 0;
-	const unit = props.data.unit || "kg";
-	const [qntty, setQntty] = useState( props.data.qntty || 0 );  // quantity
+function SabjiBox(props) {
+	// const index = props.index;	// not using this for now @future @me -> This may give better performace since with each increment or decrement call, we wo't need o findIndexById()
+	const { name, price, unit } = props.data;
+	const [qntty, setQntty] = useState(props.data.qntty);
 
 	const classes = useStyles();
 
-	function increaseQntty(){
+	function decreaseQntty() {
+		props.decrement_qntty();
+
+		setQntty( Math.max(0, qntty - 1) );
+	}
+
+	function increaseQntty() {
+		props.increment_qntty();
+
 		setQntty( qntty + 1 );
 	}
 
-	function decreaseQntty(){
-		setQntty( Math.max( qntty - 1, 0 ) );
+	function addToCart() {
+		props.add_to_cart();
+
+		setQntty(qntty !== 0 ? qntty : 1);
 	}
 
 	return (
@@ -68,7 +79,7 @@ export default function SabjiBox(props) {
 						style={{color: "rgba(0, 0, 0, 0.60)", fontSize: "1.2em",position: "absolute", left: "2%", top: "3%", backgroundColor: "rgba(0, 0, 0, 0.12)"}}
 						// disabled
 						extended
-						elevation={false}
+						elevation={1}
 					>
 						<div>{`₹ ${price}`}</div>
 						<Divider 
@@ -80,7 +91,7 @@ export default function SabjiBox(props) {
 						style={{position: "absolute", right: "2%", top: "3%"}}
 						disabled
 					>
-						{`₹ ${price} /`}
+						{`₹${price}/`}
 						<Divider />
 						{unit}
 					</Fab>
@@ -93,21 +104,28 @@ export default function SabjiBox(props) {
 				</CardActionArea>
 				<CardActions>
 					<ButtonGroup>
-						<IconButton 
-							onClick={() => decreaseQntty}
-							color="secondary">
-							<FormatIndentDecrease />
-						</IconButton>
-						{qntty >= 1 ? 
-							(<Button>
+						<Button
+							color="secondary"
+							onClick={decreaseQntty}
+							variant="text"
+						>
+							<strong>-1</strong>
+						</Button>
+						{qntty >= 1 ? (
+							<Button 
+								variant="text"
+								disabled
+							>
 								{qntty}
 							</Button>): 
-							(<Button>
+							(<Button
+								onClick={addToCart}
+							>
                             Add
 							</Button>)
 						}
 						<IconButton 
-							onClick={() => increaseQntty /**Used arrow function since we need to bind it */}
+							onClick={increaseQntty}
 							color="secondary">
 							<PlusOne />
 						</IconButton>
@@ -117,3 +135,13 @@ export default function SabjiBox(props) {
 		</>
 	);
 }
+
+function mapDispatchToProps(dispatch, orgProps) {
+	return {
+		add_to_cart: () => dispatch( AddToCartAction(orgProps.data.id) ),
+		decrement_qntty: () => dispatch( DecrementQuantity(orgProps.data.id) ),
+		increment_qntty: () => dispatch( IncrementQuantity(orgProps.data.id) ),
+	};
+}
+
+export default connect(null, mapDispatchToProps)(SabjiBox);

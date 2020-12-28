@@ -8,6 +8,7 @@ import {
 	makeStyles
 } from "@material-ui/core";
 import { FetchSabjiAction } from "../actions/sabjis";
+import { SyncAction } from "../actions/sync";
 
 const useStyles = makeStyles({
 	container: {
@@ -40,7 +41,10 @@ export default function SabjiArea() {
 		// set the boxes as loading
 		if(loading){
 			dispatch(FetchSabjiAction())
-				.finally(() => setLoading(false));
+				.finally(() => {
+					dispatch( SyncAction() );	// this maybe an async action though
+					setLoading(false);
+				});
 		}
 	});
 
@@ -56,7 +60,7 @@ export default function SabjiArea() {
 							).map(
 								(sabji, index) => (
 									<Grid item xs={6} sm={4} md={3} style={{textAlign: "center"}} key={index}>
-										<SabjiBox data={sabji} key={sabji.id} />
+										<SabjiBox index={index} data={sabji} key={sabji.id} />
 									</Grid>
 								)
 							)

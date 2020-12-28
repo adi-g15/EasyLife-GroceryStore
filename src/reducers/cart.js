@@ -29,7 +29,8 @@ function cartReducer(state = initialState, action) {
 		return [];
 
 	case ADD_TO_CART:
-		newState.push( payload );
+		newState.push( {...payload} );
+		payload.qntty = payload.qntty || 1;	// if already something. then leave it be
 		break;
 
 	case REMOVE_FROM_CART:
@@ -48,6 +49,7 @@ function cartReducer(state = initialState, action) {
 		return state;
 	}
 
+	console.log("Adding to storage");
 	localStorage.setItem("cart", JSON.stringify(newState));
 	return newState;
 }

@@ -6,13 +6,15 @@ export function FetchSabjiAction() {
 		return FetchPrices()
 			.then(array => {
 				console.debug("Received sabjis: ", array);
-				array.forEach(sabji => {
-					sabji.qntty = 0;
-				});
-
 				dispatch({
 					type: SAVE_SABJIS,
-					payload: array
+					payload: array.map((sabji) => ({
+						id: sabji._id,
+						name: sabji.name,
+						price: sabji.price,
+						unit: sabji.unit,
+						qntty: 0
+					}))
 				});
 
 				return Promise.resolve( array );

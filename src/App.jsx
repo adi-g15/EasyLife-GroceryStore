@@ -22,6 +22,11 @@ export default function App() {
 		// not being triggered more than once
 	}, [isMobile]);
 
+	useEffect(() => {
+		// eslint-disable-next-line no-undef
+		process.env.NODE_ENV === "production" && console.clear();
+	}, []);
+
 	return (
 		<BrowserRouter>
 			<NavBar isMobile={isMobile} />

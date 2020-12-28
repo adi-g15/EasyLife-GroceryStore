@@ -37,20 +37,19 @@ export function SubmitCartAction() {
 }
 
 // returns undefined
-export function AddToCartAction(sabji) {
-	return (dispatch, {cart}) => {
-		if( findIndexById(cart, sabji.id) !== -1 ) {
+export function AddToCartAction(sabji_id) {
+	return (dispatch, getState) => {
+		const state = getState();
+		if( findIndexById(state.cart, sabji_id) !== -1 ) {
 			return; // if already present in state, then just return, no need to change anything
 		}
 
+		const sabjiIndex = findIndexById( state.sabjis, sabji_id );
+		if( sabjiIndex === -1 )	return;	// sabji doesn't exist in sabjis state
+
 		dispatch({
 			type: ADD_TO_CART,
-			payload: {
-				id: sabji.id,
-				name: sabji.name,
-				price: sabji.price,
-				unit: sabji.unit
-			}
+			payload: state.sabjis[sabjiIndex]
 		});
 	};
 }
@@ -69,9 +68,10 @@ export function RemoveFromCartAction (sabji_id) {
 }
 
 export function IncrementQuantity (sabji_id) {
-	return (dispatch, {cart}) => {
+	return (dispatch, getState) => {
+		const cart = getState().cart;
 		if( findIndexById(cart, sabji_id) === -1 ) {
-			return AddToCartAction(sabji_id)(dispatch,{cart});
+			return AddToCartAction(sabji_id, true)(dispatch);
 		}
 
 		dispatch({
@@ -82,7 +82,8 @@ export function IncrementQuantity (sabji_id) {
 }
 
 export function DecrementQuantity (sabji_id) {
-	return (dispatch, {cart}) => {
+	return (dispatch, getState) => {
+		const cart = getState().cart;
 		let index = findIndexById(cart, sabji_id);
 		if( index === -1 ) {
 			return; // not present, DO NOTHING

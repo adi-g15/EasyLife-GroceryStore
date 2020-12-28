@@ -4,6 +4,14 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
 ```
 
+* Future -
+
+Store the sabjis received in the redux store and localStorage, then have an API endpoint '/next', that returns the DIFF from last time
+
+Each '/next' call accepts the token, given to a logged in user... hence this performance betterment is only for logged in users as of now
+
+Have a '/getCart' route so that user can see the same cart on another pc by passing the token
+
 * My own Original NavBar had these styles ->
 
 ```css
