@@ -5,7 +5,8 @@ import {
 	AppBar, 
 	InputAdornment, 
 	Container, 
-	ButtonGroup, 
+	ButtonGroup,
+	Grow,
 	makeStyles, 
 	TextField, 
 	Toolbar, 
@@ -20,15 +21,24 @@ import { UpdateSearchAction } from "../actions/filter";
 import { UniversalLogOutCreator } from "../actions/auth";
 
 const styling = makeStyles( theme => ({
+	appbar: {
+		backgroundColor: theme.palette.common.white
+	},
 	toolbar: {
-		backgroundColor: theme.palette.common.white,
+		backgroundColor: theme.palette.common.white
 	},
 	mobile_toolbar: {
 		backgroundColor: theme.palette.common.white,
-		paddingLeft: 2
+		paddingLeft: 2,
+		paddingRight: 2,
+		marginLeft: 2,
+		marginRight: 2
 	},
 	SearchBar: {
 		width: "30vw"
+	},
+	MobileSearchBar: {
+		width: "100%"
 	},
 	logoLink: {
 		textDecoration: "none"
@@ -41,12 +51,18 @@ function NavBar(props) {
 
 	const [cartTotal, setCartTotal] = useState( props.cart.length !== 0 ? props.cart.reduce((acc, curr) => acc +( curr.price * curr.qntty ), 0) : 0 );
 	const classes = styling();
+
+	const [openMobileBar, toggleMobileBar] = useState(false);
 	// const [searchOnFocus, toggleSearchOnFocus] = useState(false);	// will use when experimental serach bar used IN FUTURE (LIKELY NOT though :( )
 
 	useEffect(() => {
 		setCartTotal( props.cart.length !== 0 ? props.cart.reduce((acc, curr) => acc +( curr.price * curr.qntty ), 0) : 0);
 	}, [props.cart]);
  
+	function handleToggleBar() {
+		toggleMobileBar(prev => !prev);
+	}
+
 	const handleAccClick = () => {
 		if( ! props.isLoggedIn ){
 			history.push("/login");
@@ -75,7 +91,7 @@ function NavBar(props) {
 
 	return (
 		<header>
-			<AppBar position="static">
+			<AppBar position="static" className={classes.appbar}>
 				<Toolbar className={ props.isMobile ? classes.mobile_toolbar : classes.toolbar}>
 					<Container>
 						{/* <img src="/logo.png" alt="EasyLife" height="75%"/> */}
@@ -89,7 +105,7 @@ function NavBar(props) {
 					{
 						props.isMobile ? 
 							(
-								<IconButton>
+								<IconButton onClick={handleToggleBar}>
 									<Search />
 								</IconButton>
 							):
@@ -162,6 +178,31 @@ function NavBar(props) {
 						}
 					</ButtonGroup>
 				</Toolbar>
+				{openMobileBar && (<Grow
+					in={openMobileBar}
+					style={{ transformOrigin: "0 0 0" }}
+					{...(openMobileBar ? { timeout: 1000 } : {})}
+				>
+					<Toolbar className={ props.isMobile ? classes.mobile_toolbar : classes.toolbar}>
+						<form
+							onSubmit={searchSubmit}
+							style={{width: "100%"}}
+						>
+							<TextField 
+								// style={styling.search}
+								label="Search..."
+								variant="outlined" 
+								size="small" 
+								type="text"
+								value={props.search}
+								onChange={props.updateSearch}
+								className={ classes.MobileSearchBar }
+								fullWidth
+							/>
+						</form>
+					</Toolbar>
+				</Grow>)
+				}
 			</AppBar>
 		</header>
 	);
