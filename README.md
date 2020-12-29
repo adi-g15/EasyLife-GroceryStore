@@ -1,4 +1,4 @@
-## EasyLife-GroceryStore
+## EasyLife GroceryStore (Template Starter)
 
 Easylife Website source code, for template use as a grocery store website. Provides all basic functionality, and more can be added on top of it, since modular design has been preferred, new changes 'above' the original components should be easy to add :D
 
