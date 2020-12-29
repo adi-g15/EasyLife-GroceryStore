@@ -1,16 +1,12 @@
-import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import CartBox from "../components/cartbox";
 import { useSelector, useDispatch } from "react-redux";
-import { Container, Button, makeStyles } from "@material-ui/core";
+import { Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Container, Button, makeStyles } from "@material-ui/core";
 import { ClearCartAction } from "../actions/cart";
 
 const useStyles = makeStyles({
 	cartArea: {
 		textAlign: "center"
-	},
-	totalArea: {
-		
 	}
 });
 
@@ -19,10 +15,21 @@ export default function CartPage() {
 
 	const cartTotal = cart.reduce((acc, curr) => acc + (curr.price * curr.qntty), 0);
 	const classes = useStyles();
-	const history = useHistory();
 	const dispatch = useDispatch();
 
-	const name = useSelector(state => state.auth.user.contact || state.auth.user.uname);
+	const [open, toggleOpen] = useState(false);
+
+	function handleClose() {
+		toggleOpen( !open );
+	}
+
+	function handleClear(e) {
+		dispatch(ClearCartAction());
+
+		handleClose(e);
+	}
+
+	const UserId = useSelector(state => state.auth.user.id);
 
 	useEffect(() => {
 		console.log("CartTotal refreshed, ", cartTotal);
@@ -34,20 +41,20 @@ export default function CartPage() {
 		const msg = `
 	ORDER DETAILS
 	-----------------
-	User - ${name}
+	UserId - ${UserId}
 
 	${cart.map((sabji => [sabji.name,sabji.price,"/",sabji.unit].toString())).join("\t\n")}
 		`;
 
 		if ( ! window.open( encodeURI("https://wa.me/918700905832?text=" + msg ), "_blank") ){
-			alert(encodeURI("https://wa.me/918700905832?text=" + msg ));
+			alert(`
+			Couldn't Open whatsapp, click on this link, it will directly lead to whatsapp website :D
+			${encodeURI("https://wa.me/918700905832?text=" + msg )}`);
 		}
 
 		// @future @someone - Can add verification by first sending the order details to backend, then it responds with a order id, and we only send the order id and list of sabjis to whatsapp
 
-		if( confirm("Do you want to clear the cart now ? 🤔") ){
-			dispatch(ClearCartAction());
-		}
+		toggleOpen(true);
 	}
 
 	return (
@@ -61,17 +68,34 @@ export default function CartPage() {
 						)
 					}
 				</div>
-				<Button
+				{ (cart.length !== 0) && (<Button
 					color="secondary"
 					variant="contained"
 					onClick={SubmitCart}
 				>
 					Order on whatsapp🍅🎍
-				</Button>
+				</Button>)}
+				<Dialog
+					open={open}
+					onClose={handleClose}
+				>
+					<DialogTitle id="alert-dialog-title">{"Do you want to clear the cart now ? 🤔"}</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							After sending the order on whatsapp (order is also stored on server),
+							You can simply clear the cart now :D
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClear} color="primary" autoFocus>
+							OK
+						</Button>
+						<Button onClick={handleClose} color="primary">
+							Cancel
+						</Button>
+					</DialogActions>
+				</Dialog>
 			</Container>
-			<div className={classes.totalArea}>
-                Current Cart Total is {`${cartTotal}`}
-			</div>
 		</>
 	);
 }
