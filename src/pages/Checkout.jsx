@@ -7,6 +7,9 @@ import { ClearCartAction } from "../actions/cart";
 const useStyles = makeStyles({
 	cartArea: {
 		textAlign: "center"
+	},
+	orderBtn: {
+		marginBottom: "5vh"
 	}
 });
 
@@ -29,7 +32,7 @@ export default function CartPage() {
 		handleClose(e);
 	}
 
-	const UserId = useSelector(state => state.auth.user.id);
+	const UserToken = useSelector(state => state.auth.token);
 
 	useEffect(() => {
 		console.log("CartTotal refreshed, ", cartTotal);
@@ -41,10 +44,11 @@ export default function CartPage() {
 		const msg = `
 	ORDER DETAILS
 	-----------------
-	UserId - ${UserId}
+	UserId - ${UserToken}
 
-	${cart.map((sabji => [sabji.name,sabji.price,"/",sabji.unit].toString())).join("\t\n")}
-		`;
+${cart.map((sabji => (`${sabji.name}\t${sabji.price}/${sabji.unit}\tx${sabji.qntty}`))).join("\n")}
+	
+	`;
 
 		if ( ! window.open( encodeURI("https://wa.me/918700905832?text=" + msg ), "_blank") ){
 			alert(`
@@ -72,9 +76,11 @@ export default function CartPage() {
 					color="secondary"
 					variant="contained"
 					onClick={SubmitCart}
+					className={classes.orderBtn}
 				>
 					Order on whatsapp🍅🎍
 				</Button>)}
+				<div></div>
 				<Dialog
 					open={open}
 					onClose={handleClose}
