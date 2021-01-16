@@ -87,7 +87,7 @@ function SabjiBox(props) {
 						title={name}
 					/>
 					<Paper className={classes.priceBtn}
-						style={{color: 'black', backgroundColor: "rgba(255, 255, 255, 0.8)", fontSize: "1.2em",position: "absolute", left: "2%", top: "3%"}}
+						style={{color: "black", backgroundColor: "rgba(255, 255, 255, 0.8)", fontSize: "1.2em",position: "absolute", left: "2%", top: "3%"}}
 						elevation={1}
 					>
 						<div>{`₹ ${price}`}</div>
